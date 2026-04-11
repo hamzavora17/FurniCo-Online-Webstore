@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" style="scroll-behavior: smooth;">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Gallery | FurniCo</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+<header class="navbar">
+  <div class="logo">FurniCo</div>
+  <nav>
+    <a href="blog.html">Blog Spot</a>
+    <a href="video-marketing.html" style="color: var(--accent-color);">Video Gallery</a>
+    <a href="affiliate-marketing.html">Affiliate Program</a>
+    <a href="help.html">Help</a>
+    <a href="checkout.html"><i class="fa-solid fa-cart-shopping"></i><span id="cartCount" class="cart-badge">0</span></a>
+    <button id="themeToggle" class="theme-toggle" aria-label="Toggle Dark Mode"><i class="fa-solid fa-moon"></i></button>
+  </nav>
+</header>
+
+<section class="section">
+  <div class="content">
+    <div style="text-align: left; margin-bottom: 30px;">
+      <a href="index.html" style="display: inline-flex; align-items: center; padding: 10px 20px; background-color: var(--bg-white); color: var(--text-main); border-radius: var(--radius); box-shadow: var(--shadow-sm); font-weight: 500; font-size: 0.95rem; border: 1px solid rgba(0,0,0,0.05); transition: transform 0.3s, box-shadow 0.3s;"><i class="fa-solid fa-arrow-left" style="margin-right: 8px;"></i> Back to Store</a>
+    </div>
+
+    <div class="featured-topic" style="text-align: center; border-left: none; border-top: 5px solid var(--accent-color);">
+      <span>Experience Design</span>
+      <h2 style="text-align: center;">FurniCo in Motion</h2>
+      <p style="text-align: center; max-width: 700px; margin: 0 auto;">
+        Explore our latest collections, behind-the-scenes craftsmanship, and interior design inspiration through our curated video series.
+      </p>
+    </div>
+
+    <div class="cards video-grid">
+      <!-- Video 1 -->
+      <div class="video-card">
+        <div class="video-wrapper">
+          <video controls>
+            <source src="videos/FurniCo_Brand_Video_Creation.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+        <div class="video-info">
+          <h3>Spring Collection 2026</h3>
+          <p>Brighten your home with our newest arrivals. Featuring sustainable oak and breathable linen fabrics.</p>
+        </div>
+      </div>
+
+      <!-- Video AR -->
+      <div class="video-card">
+        <div class="video-wrapper">
+          <video controls>
+            <source src="videos/AR_Furniture_Video.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+        <div class="video-info">
+          <h3>Augmented Reality Preview</h3>
+          <p>Visualize our furniture in your own space with our new AR feature.</p>
+          <button class="btn" style="margin-top: 15px; width: 100%;" onclick="document.getElementById('arModal').classList.add('show')">Try AR Now</button>
+        </div>
+      </div>
+
+      <!-- Video 2 -->
+      <div class="video-card">
+        <div class="video-wrapper">
+          <video controls>
+            <source src="videos/Design For Art of Comfort.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+        <div class="video-info">
+          <h3>The Art of Comfort</h3>
+          <p>Discover how we engineer our sofas for the perfect balance of softness and support. A look inside our design philosophy.</p>
+        </div>
+      </div>
+
+      <!-- Video 3 -->
+      <div class="video-card">
+        <div class="video-wrapper">
+          <video controls>
+            <source src="videos/Furniture_Marketing_Video_Creation.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+        <div class="video-info">
+          <h3>Crafted for Longevity</h3>
+          <p>See the journey from raw timber to your living room. We are committed to 100% ethical sourcing.</p>
+        </div>
+      </div>
+
+      <!-- Video 4 -->
+      <div class="video-card">
+        <div class="video-wrapper">
+          <video controls>
+            <source src="videos/Small_Space_Solution_Furniture_Video.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+        <div class="video-info">
+          <h3>Small Space Solutions</h3>
+          <p>Maximize your apartment with our multi-functional furniture pieces designed for modern urban living.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-brand">
+      <div class="footer-logo" onclick="window.location.href='index.html'">FurniCo</div>
+      <p>Premium furniture designed for modern living. Quality craftsmanship delivered to your doorstep.</p>
+      <div class="social-links">
+        <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="#" aria-label="Twitter"><i class="fa-brands fa-twitter"></i></a>
+        <a href="#" aria-label="Pinterest"><i class="fa-brands fa-pinterest"></i></a>
+      </div>
+    </div>
+    <div class="footer-links">
+      <h3>Shop</h3>
+      <ul>
+        <li><a href="sofas.html">Sofas</a></li>
+        <li><a href="beds.html">Beds</a></li>
+        <li><a href="chairs.html">Chairs</a></li>
+        <li><a href="side-tables.html">Side Tables</a></li>
+        <li><a href="dining-tables.html">Dining Tables</a></li>
+      </ul>
+    </div>
+    <div class="footer-links">
+      <h3>Support</h3>
+      <ul>
+        <li><a href="shipping.html">Shipping Info</a></li>
+        <li><a href="returns.html">Returns & Refunds</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="privacy.html">Privacy Policy</a></li>
+        <li><a href="terms.html">Terms & Conditions</a></li>
+      </ul>
+    </div>
+    <div class="footer-newsletter">
+      <h3>Stay Updated</h3>
+      <p>Subscribe for exclusive offers and design inspiration.</p>
+      <form id="newsletterForm" class="newsletter-form">
+        <input type="email" placeholder="Your email address" required>
+        <button type="submit" aria-label="Subscribe"><i class="fa-solid fa-arrow-right"></i></button>
+      </form>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 FurniCo. All rights reserved.</p>
+    <div class="footer-bottom-links">
+      <a href="terms.html">Terms</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="index.html#contact">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<!-- AR Instructions Modal -->
+<div id="arModal" class="modal">
+  <div class="modal-content">
+    <span id="closeArModal" class="close-modal">&times;</span>
+    <h2>Augmented Reality Guide</h2>
+    <p>Follow these steps to visualize furniture in your home:</p>
+    <ol style="text-align: left; margin: 20px auto; max-width: 350px; line-height: 1.8; list-style-position: inside;">
+      <li>Ensure the room is well-lit.</li>
+      <li>Point your camera at the floor and move it slowly.</li>
+      <li>Select a product from the catalog.</li>
+      <li>Tap to place and drag to rotate.</li>
+    </ol>
+    <button class="btn" onclick="document.getElementById('arModal').classList.remove('show')">Start Experience</button>
+  </div>
+</div>
+
+<script src='https://cdn.jotfor.ms/agent/embedjs/019cb77c093d7bd2baa0928bf0e1519c4ac5/embed.js'>
+</script>
+<script src="script.js"></script>
+</body>
+</html>

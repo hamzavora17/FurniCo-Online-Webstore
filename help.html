@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" style="scroll-behavior: smooth;">
+<head>
+  <meta charset="UTF-8">
+  <title>Help Center | FurniCo</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+<header class="navbar">
+  <div class="logo">FurniCo</div>
+  <nav>
+    <a href="blog.html">Blog Spot</a>
+    <a href="video-marketing.html">Video Gallery</a>
+    <a href="affiliate-marketing.html">Affiliate Program</a>
+    <a href="help.html">Help</a>
+    <a href="checkout.html"><i class="fa-solid fa-cart-shopping"></i><span id="cartCount" class="cart-badge">0</span></a>
+    <button id="themeToggle" class="theme-toggle" aria-label="Toggle Dark Mode"><i class="fa-solid fa-moon"></i></button>
+  </nav>
+</header>
+
+<section class="section">
+  <div class="content">
+    <div style="text-align: left; margin-bottom: 30px;">
+      <a href="index.html" style="display: inline-flex; align-items: center; padding: 10px 20px; background-color: var(--bg-white); color: var(--text-main); border-radius: var(--radius); box-shadow: var(--shadow-sm); font-weight: 500; font-size: 0.95rem; border: 1px solid rgba(0,0,0,0.05); transition: transform 0.3s, box-shadow 0.3s;"><i class="fa-solid fa-arrow-left" style="margin-right: 8px;"></i> Back to Store</a>
+    </div>
+
+    <div class="category-intro" style="text-align: center; margin-bottom: 60px;">
+      <h2 style="font-size: 3rem; margin-bottom: 1rem;">How can we help?</h2>
+      <p style="font-size: 1.2rem; color: var(--text-muted); max-width: 700px; margin: 0 auto 40px;">
+        Browse our help topics or get in touch with our support team.
+      </p>
+
+      <div class="features" style="max-width: 1000px; margin: 0 auto;">
+        <div class="feature" style="text-align: center; cursor: pointer;" onclick="window.location.href='#shipping.html'">
+          <i class="fa-solid fa-truck-fast" style="font-size: 2.5rem; color: var(--accent-color); margin-bottom: 15px; display: block;"></i>
+          <h4 style="margin-bottom: 5px;">Shipping & Delivery</h4>
+          <p>Track your order and delivery info.</p>
+        </div>
+        <div class="feature" style="text-align: center; cursor: pointer;" onclick="window.location.href='#returns.html'">
+          <i class="fa-solid fa-rotate-left" style="font-size: 2.5rem; color: var(--accent-color); margin-bottom: 15px; display: block;"></i>
+          <h4 style="margin-bottom: 5px;">Returns & Refunds</h4>
+          <p>Policy and return instructions.</p>
+        </div>
+        <div class="feature" style="text-align: center; cursor: pointer;" onclick="window.location.href='#faq.html'">
+          <i class="fa-solid fa-circle-question" style="font-size: 2.5rem; color: var(--accent-color); margin-bottom: 15px; display: block;"></i>
+          <h4 style="margin-bottom: 5px;">FAQs</h4>
+          <p>Answers to common questions.</p>
+        </div>
+        <div class="feature" style="text-align: center; cursor: pointer;" onclick="document.getElementById('contact').scrollIntoView({behavior: 'smooth'})">
+          <i class="fa-solid fa-envelope" style="font-size: 2.5rem; color: var(--accent-color); margin-bottom: 15px; display: block;"></i>
+          <h4 style="margin-bottom: 5px;">Contact Us</h4>
+          <p>Reach out to our support team.</p>
+        </div>
+      </div>
+    </div>
+
+    <hr style="margin: 30px 0; border: 0; border-top: 1px solid #ddd;">
+
+    <div id="contact" style="max-width: 600px; margin: 0 auto;">
+      <h3 style="text-align: center; margin-bottom: 20px;">Send us a Message</h3>
+      <form id="contactForm" class="contact-form">
+        <input type="text" placeholder="Your Name" required>
+        <input type="email" placeholder="Your Email" required>
+        <select style="width: 100%; padding: 15px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 15px; background: var(--bg-white); color: var(--text-main); font-family: inherit;">
+            <option value="" disabled selected>Select a Topic</option>
+            <option value="order">Order Status</option>
+            <option value="product">Product Inquiry</option>
+            <option value="return">Return/Refund</option>
+            <option value="other">Other</option>
+        </select>
+        <textarea placeholder="Describe your issue..." rows="5" required></textarea>
+        <button type="submit" class="btn" style="width: 100%;">Submit Request</button>
+      </form>
+
+      <div class="support-resources">
+        <h4>Support Resources</h4>
+        <div class="resource-links">
+          <a href="shipping.html" class="resource-link"><i class="fa-solid fa-truck"></i> Shipping Info</a>
+          <a href="returns.html" class="resource-link"><i class="fa-solid fa-rotate-left"></i> Returns & Refunds</a>
+          <a href="faq.html" class="resource-link"><i class="fa-solid fa-circle-question"></i> FAQ</a>
+          <a href="privacy.html" class="resource-link"><i class="fa-solid fa-shield-halved"></i> Privacy Policy</a>
+          <a href="terms.html" class="resource-link"><i class="fa-solid fa-file-contract"></i> Terms & Conditions</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-brand">
+      <div class="footer-logo" onclick="window.location.href='index.html'">FurniCo</div>
+      <p>Premium furniture designed for modern living. Quality craftsmanship delivered to your doorstep.</p>
+    </div>
+    <div class="footer-links">
+      <h3>Shop</h3>
+      <ul>
+        <li><a href="sofas.html">Sofas</a></li>
+        <li><a href="beds.html">Beds</a></li>
+        <li><a href="chairs.html">Chairs</a></li>
+        <li><a href="side-tables.html">Side Tables</a></li>
+        <li><a href="dining-tables.html">Dining Tables</a></li>
+      </ul>
+    </div>
+    <div class="footer-links">
+      <h3>Support</h3>
+      <ul>
+        <li><a href="shipping.html">Shipping Info</a></li>
+        <li><a href="returns.html">Returns & Refunds</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="privacy.html">Privacy Policy</a></li>
+        <li><a href="terms.html">Terms & Conditions</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 FurniCo. All rights reserved.</p>
+  </div>
+</footer>
+
+<script src='https://cdn.jotfor.ms/agent/embedjs/019cb77c093d7bd2baa0928bf0e1519c4ac5/embed.js'>
+</script>
+<script src="script.js"></script>
+</body>
+</html>

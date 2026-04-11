@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en" style="scroll-behavior: smooth;">
+<head>
+  <meta charset="UTF-8">
+  <title>Designer Chairs | FurniCo</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+<header class="navbar">
+  <div class="logo">FurniCo</div>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="sofas.html">Sofas</a>
+    <a href="beds.html">Beds</a>
+    <a href="chairs.html" style="color: var(--accent-color);">Chairs</a>
+    <a href="side-tables.html">Side Tables</a>
+    <a href="dining-tables.html">Dining Tables</a>
+    <!-- <a href="affiliate-marketing.html">Affiliate Program</a> -->
+    <a href="help.html">Help</a>
+    <a href="checkout.html"><i class="fa-solid fa-cart-shopping"></i><span id="cartCount" class="cart-badge">0</span></a>
+    <button id="themeToggle" class="theme-toggle" aria-label="Toggle Dark Mode"><i class="fa-solid fa-moon"></i></button>
+  </nav>
+</header>
+
+<section class="section">
+  <div class="content">
+    <div class="category-intro" style="text-align: center; margin-bottom: 60px;">
+      <h2 style="font-size: 3rem; margin-bottom: 1rem;">Designer Chairs</h2>
+      <p style="font-size: 1.2rem; color: var(--text-muted); max-width: 700px; margin: 0 auto 40px;">
+        Ergonomic chairs designed for comfort, posture support, and modern interiors.
+      </p>
+
+      <div class="features" style="max-width: 1000px; margin: 0 auto;">
+        <div class="feature" style="text-align: center;">
+          <i class="fa-solid fa-user" style="font-size: 2.5rem; color: var(--accent-color); margin-bottom: 15px; display: block;"></i>
+          <h4 style="margin-bottom: 5px;">Ergonomic Design</h4>
+        </div>
+        <div class="feature" style="text-align: center;">
+          <i class="fa-solid fa-layer-group" style="font-size: 2.5rem; color: var(--accent-color); margin-bottom: 15px; display: block;"></i>
+          <h4 style="margin-bottom: 5px;">Quality Frames</h4>
+        </div>
+        <div class="feature" style="text-align: center;">
+          <i class="fa-solid fa-briefcase" style="font-size: 2.5rem; color: var(--accent-color); margin-bottom: 15px; display: block;"></i>
+          <h4 style="margin-bottom: 5px;">Multi-Purpose</h4>
+        </div>
+        <div class="feature" style="text-align: center;">
+          <i class="fa-solid fa-palette" style="font-size: 2.5rem; color: var(--accent-color); margin-bottom: 15px; display: block;"></i>
+          <h4 style="margin-bottom: 5px;">Stylish Finishes</h4>
+        </div>
+      </div>
+    </div>
+
+    <hr style="margin: 30px 0; border: 0; border-top: 1px solid #ddd;">
+
+    <h3>Designer Seating</h3>
+    <div class="filter-container">
+      <label for="priceFilter">Filter by Price:</label>
+      <select id="priceFilter">
+        <option value="all">All Prices</option>
+        <option value="0-200">Under $200</option>
+        <option value="200-500">$200 - $500</option>
+        <option value="500-1000">$500 - $1,000</option>
+        <option value="1000+">$1,000+</option>
+      </select>
+    </div>
+    <div class="product-list">
+      <!-- Product 1 -->
+      <div class="product-card" style="margin-bottom: 20px; padding: 15px; border: 1px solid #eee; border-radius: 5px;">
+        <div class="new-arrival-badge">New Arrival</div>
+        <img src="https://images.unsplash.com/photo-1505843490538-5133c6c7d0e1?auto=format&fit=crop&w=800&q=80" alt="Ergo-Office Pro" style="width: 100%; height: 200px; object-fit: cover; border-radius: 5px; margin-bottom: 10px;">
+        <h4>Ergo-Office Pro</h4>
+        <p>Mesh back support for long working hours. Adjustable height.</p>
+        <p><strong>$250</strong></p>
+        <button onclick="addToCart('Ergo-Office Pro', 250, 'https://images.unsplash.com/photo-1505843490538-5133c6c7d0e1?auto=format&fit=crop&w=800&q=80')" style="padding: 10px 20px; background-color: #333; color: #fff; border: none; cursor: pointer;">Add to Cart</button>
+      </div>
+
+      <!-- Product 2 -->
+      <div class="product-card" style="margin-bottom: 20px; padding: 15px; border: 1px solid #eee; border-radius: 5px;">
+        <img src="https://images.unsplash.com/photo-1580480055273-228ff5388ef8?auto=format&fit=crop&w=800&q=80" alt="Scandi Dining Chair" style="width: 100%; height: 200px; object-fit: cover; border-radius: 5px; margin-bottom: 10px;">
+        <h4>Scandi Dining Chair (Set of 2)</h4>
+        <p>Elegant wooden legs with a curved plastic shell.</p>
+        <p><strong>$180</strong> <span style="color: #d9534f; font-size: 0.9em;">(Trending)</span></p>
+        <button onclick="addToCart('Scandi Dining Chair Set', 180, 'https://images.unsplash.com/photo-1580480055273-228ff5388ef8?auto=format&fit=crop&w=800&q=80')" style="padding: 10px 20px; background-color: #333; color: #fff; border: none; cursor: pointer;">Add to Cart</button>
+      </div>
+
+      <!-- Product 3 -->
+      <div class="product-card" style="margin-bottom: 20px; padding: 15px; border: 1px solid #eee; border-radius: 5px;">
+        <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80" alt="Velvet Accent Chair" style="width: 100%; height: 200px; object-fit: cover; border-radius: 5px; margin-bottom: 10px;">
+        <h4>Velvet Accent Chair</h4>
+        <p>Luxurious velvet upholstery with gold legs. A statement piece.</p>
+        <p><strong>$320</strong></p>
+        <button onclick="addToCart('Velvet Accent Chair', 320, 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80')" style="padding: 10px 20px; background-color: #333; color: #fff; border: none; cursor: pointer;">Add to Cart</button>
+      </div>
+
+      <!-- Product 4 -->
+      <div class="product-card" style="margin-bottom: 20px; padding: 15px; border: 1px solid #eee; border-radius: 5px;">
+        <img src="https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?auto=format&fit=crop&w=800&q=80" alt="Modern Recliner" style="width: 100%; height: 200px; object-fit: cover; border-radius: 5px; margin-bottom: 10px;">
+        <h4>Modern Recliner</h4>
+        <p>Sleek design with hidden reclining mechanism for ultimate comfort.</p>
+        <p><strong>$450</strong></p>
+        <button onclick="addToCart('Modern Recliner', 450, 'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?auto=format&fit=crop&w=800&q=80')" style="padding: 10px 20px; background-color: #333; color: #fff; border: none; cursor: pointer;">Add to Cart</button>
+      </div>
+
+      <!-- Product 5 -->
+      <div class="product-card" style="margin-bottom: 20px; padding: 15px; border: 1px solid #eee; border-radius: 5px;">
+        <img src="https://images.unsplash.com/photo-1503602642458-232111445657?auto=format&fit=crop&w=800&q=80" alt="Industrial Bar Stool" style="width: 100%; height: 200px; object-fit: cover; border-radius: 5px; margin-bottom: 10px;">
+        <h4>Industrial Bar Stool</h4>
+        <p>Adjustable height metal stool with a rustic wooden seat.</p>
+        <p><strong>$120</strong></p>
+        <button onclick="addToCart('Industrial Bar Stool', 120, 'https://images.unsplash.com/photo-1503602642458-232111445657?auto=format&fit=crop&w=800&q=80')" style="padding: 10px 20px; background-color: #333; color: #fff; border: none; cursor: pointer;">Add to Cart</button>
+      </div>
+
+      <!-- Product 6 -->
+      <div class="product-card" style="margin-bottom: 20px; padding: 15px; border: 1px solid #eee; border-radius: 5px;">
+        <img src="https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?auto=format&fit=crop&w=800&q=80" alt="Classic Wingback Chair" style="width: 100%; height: 200px; object-fit: cover; border-radius: 5px; margin-bottom: 10px;">
+        <h4>Classic Wingback Chair</h4>
+        <p>Traditional high-back design with premium fabric and tufted details.</p>
+        <p><strong>$380</strong></p>
+        <button onclick="addToCart('Classic Wingback Chair', 380, 'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?auto=format&fit=crop&w=800&q=80')" style="padding: 10px 20px; background-color: #333; color: #fff; border: none; cursor: pointer;">Add to Cart</button>
+      </div>
+
+      <!-- Coming Soon Placeholder -->
+      <div class="product-card no-hover" style="grid-column: 1 / -1; margin-bottom: 20px; padding: 30px; border: 2px dashed #ccc; border-radius: 5px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background-color: rgba(0,0,0,0.02); min-height: 250px;">
+        <i class="fa-solid fa-box-open" style="font-size: 3rem; color: #ccc; margin-bottom: 20px;"></i>
+        <h4 style="color: #888; margin-bottom: 10px;">More Coming Soon</h4>
+        <p style="color: #aaa;">We are crafting new designs for you. Stay tuned!</p>
+        <button class="pulse-btn" onclick="document.getElementById('notifyModal').classList.add('show')" style="margin-top: 15px; padding: 10px 25px; background-color: var(--accent-color); color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: 600;">Notify Me</button>
+      </div>
+    </div>
+
+    <p style="margin-top: 20px;"><a href="checkout.html" style="font-weight: bold; color: #333;">Go to Checkout &rarr;</a></p>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-brand">
+      <div class="footer-logo" onclick="window.location.href='index.html'">FurniCo</div>
+      <p>Premium furniture designed for modern living. Quality craftsmanship delivered to your doorstep.</p>
+      <div class="social-links">
+        <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="#" aria-label="Twitter"><i class="fa-brands fa-twitter"></i></a>
+        <a href="#" aria-label="Pinterest"><i class="fa-brands fa-pinterest"></i></a>
+      </div>
+    </div>
+    <div class="footer-links">
+      <h3>Shop</h3>
+      <ul>
+        <li><a href="sofas.html">Sofas</a></li>
+        <li><a href="beds.html">Beds</a></li>
+        <li><a href="chairs.html">Chairs</a></li>
+        <li><a href="side-tables.html">Side Tables</a></li>
+        <li><a href="dining-tables.html">Dining Tables</a></li>
+      </ul>
+    </div>
+    <div class="footer-links">
+      <h3>Support</h3>
+      <ul>
+        <li><a href="shipping.html">Shipping Info</a></li>
+        <li><a href="returns.html">Returns & Refunds</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="privacy.html">Privacy Policy</a></li>
+        <li><a href="terms.html">Terms & Conditions</a></li>
+      </ul>
+    </div>
+    <div class="footer-newsletter">
+      <h3>Stay Updated</h3>
+      <p>Subscribe for exclusive offers and design inspiration.</p>
+      <form id="newsletterForm" class="newsletter-form">
+        <input type="email" placeholder="Your email address" required>
+        <button type="submit" aria-label="Subscribe"><i class="fa-solid fa-arrow-right"></i></button>
+      </form>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 FurniCo. All rights reserved.</p>
+    <div class="footer-bottom-links">
+      <a href="terms.html">Terms</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="index.html#contact">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<!-- Newsletter Modal -->
+<div id="newsletterModal" class="modal">
+  <div class="modal-content">
+    <span class="close-modal">&times;</span>
+    <h2>Unlock 10% Off!</h2>
+    <p>Subscribe to our newsletter and get a special discount code for your first purchase.</p>
+    <form id="modalNewsletterForm">
+      <input type="email" placeholder="Enter your email address" required>
+      <button type="submit">Get My Discount</button>
+    </form>
+  </div>
+</div>
+
+<!-- Notify Modal -->
+<div id="notifyModal" class="modal">
+  <div class="modal-content">
+    <span id="closeNotifyModal" class="close-modal">&times;</span>
+    <h2>Coming Soon</h2>
+    <p>You will be soon notified with Email</p>
+    <form id="notifyForm">
+      <input type="email" placeholder="Enter your email address" required>
+      <button type="submit">Notify Me</button>
+    </form>
+  </div>
+</div>
+
+<script src='https://cdn.jotfor.ms/agent/embedjs/019cb77c093d7bd2baa0928bf0e1519c4ac5/embed.js'>
+</script>
+<script src="script.js"></script>
+</body>
+</html>
