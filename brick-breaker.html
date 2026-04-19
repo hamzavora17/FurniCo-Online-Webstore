@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en" style="scroll-behavior: smooth;">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brick Breaker | FurniCo</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    .game-layout {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .game-console {
+      position: relative;
+      background: linear-gradient(145deg, #1a1a24, #121218);
+      border-radius: 24px;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.6), inset 0 2px 0px rgba(255,255,255,0.1);
+      padding: 30px;
+      border: 1px solid rgba(255,255,255,0.05);
+      flex: 1;
+      min-width: 300px;
+      max-width: 860px;
+    }
+    .game-console::after {
+      content: '';
+      position: absolute;
+      top: 15px; left: 15px; right: 15px; bottom: 15px;
+      border: 2px solid rgba(226, 177, 60, 0.05);
+      border-radius: 14px;
+      pointer-events: none;
+    }
+    canvas {
+      background: linear-gradient(135deg, #111116, #0a0a0f);
+      border-radius: 12px;
+      box-shadow: 0 0 30px rgba(226, 177, 60, 0.15), inset 0 0 30px rgba(0,0,0,0.8);
+      display: block;
+      margin: 0 auto;
+      max-width: 100%;
+      border: 2px solid rgba(255,255,255,0.03);
+      position: relative;
+      z-index: 2;
+      image-rendering: pixelated;
+    }
+    #gameOverlay {
+      position: absolute;
+      top: 30px; left: 30px; right: 30px; bottom: 30px;
+      background: rgba(10, 10, 15, 0.85);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      z-index: 10;
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: opacity 0.3s ease;
+    }
+    #gameOverlay.hidden {
+      display: none;
+      opacity: 0;
+      pointer-events: none;
+    }
+    #gameOverlay h2 {
+      font-size: 3.5rem;
+      margin-bottom: 20px;
+      color: var(--accent-color);
+      text-shadow: 0 0 25px rgba(226, 177, 60, 0.6);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      text-align: center;
+    }
+    #gameOverlay p {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+      line-height: 1.6;
+      max-width: 80%;
+      text-align: center;
+    }
+    .game-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      padding: 0 10px;
+      position: relative;
+      z-index: 2;
+    }
+    .game-title {
+      color: var(--accent-color);
+      font-size: 2.2rem;
+      margin: 0;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-shadow: 0 0 15px rgba(226, 177, 60, 0.3);
+    }
+    .game-score-display {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #fff;
+      background: rgba(255,255,255,0.05);
+      padding: 10px 25px;
+      border-radius: 30px;
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
+    }
+    .game-score-display span {
+      color: var(--accent-color);
+    }
+    .game-info-panel {
+      width: 100%;
+      max-width: 860px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+      text-align: left;
+    }
+    .rules-card, .rewards-card {
+      background: var(--bg-card);
+      border-radius: 16px;
+      padding: 25px;
+      border: 1px solid rgba(0,0,0,0.05);
+      box-shadow: var(--shadow-md);
+    }
+    body.dark-mode .rules-card, body.dark-mode .rewards-card {
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    .sidebar-title {
+      font-size: 1.2rem;
+      color: var(--text-main);
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .sidebar-title i {
+      color: var(--accent-color);
+    }
+    .points-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .points-list li {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px dashed rgba(0,0,0,0.1);
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+    body.dark-mode .points-list li {
+      border-bottom-color: rgba(255,255,255,0.1);
+    }
+    .points-list li:last-child {
+      border-bottom: none;
+    }
+    .points-list li strong {
+      color: var(--text-main);
+    }
+    .btn-arcade {
+      background: linear-gradient(135deg, var(--accent-color), #d49c25);
+      color: #fff;
+      border: none;
+      box-shadow: 0 4px 15px rgba(226, 177, 60, 0.4);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border-radius: 30px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .btn-arcade:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(226, 177, 60, 0.6);
+    }
+  </style>
+</head>
+<body>
+
+<header class="navbar">
+  <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">FurniCo</div>
+  <nav>
+    <a href="offers.html">Offers</a>
+    <a href="blog.html">Blog Spot</a>
+    <a href="video-marketing.html">Video Gallery</a>
+    <a href="affiliate-marketing.html">Affiliate Program</a>
+    <a href="help.html">Help</a>
+    <a href="checkout.html"><i class="fa-solid fa-cart-shopping"></i><span id="cartCount" class="cart-badge">0</span></a>
+    <button id="themeToggle" class="theme-toggle" aria-label="Toggle Dark Mode"><i class="fa-solid fa-moon"></i></button>
+  </nav>
+</header>
+
+<section class="section" style="min-height: 80vh;">
+  <div class="content" style="max-width: 1200px; margin: 0 auto;">
+    <div style="text-align: left; margin-bottom: 30px;">
+      <a href="offers.html" style="display: inline-flex; align-items: center; padding: 10px 20px; background-color: var(--bg-white); color: var(--text-main); border-radius: var(--radius); box-shadow: var(--shadow-sm); font-weight: 500; font-size: 0.95rem; border: 1px solid rgba(0,0,0,0.05); transition: transform 0.3s, box-shadow 0.3s;">
+        <i class="fa-solid fa-arrow-left" style="margin-right: 8px;"></i> Back to Offers
+      </a>
+    </div>
+
+    <div class="game-layout">
+      <!-- Game Console -->
+      <div class="game-console">
+        <div class="game-header">
+          <h1 class="game-title">Brick Breaker</h1>
+          <div class="game-score-display">SCORE <span id="currentScore">0</span></div>
+        </div>
+        
+        <canvas id="gameCanvas" width="800" height="400"></canvas>
+        
+        <div id="gameOverlay">
+          <h2 id="overlayTitle">Arcade Mode</h2>
+          <p id="overlayMessage">Destroy the bricks to earn exclusive discount points!</p>
+          <div>
+            <button class="btn-arcade" id="startBtn" style="margin: 10px; padding: 15px 50px; font-size: 1.2rem;">Insert Coin (Start)</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings / Rules Info Panel -->
+      <div class="game-info-panel">
+        <div class="rules-card">
+          <h3 class="sidebar-title"><i class="fa-solid fa-book-open"></i> How to Play</h3>
+          <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 0;">
+            Use your mouse or swipe to move the paddle. Bounce the ball to break all bricks. Don't let the ball hit the floor!
+          </p>
+        </div>
+
+        <div class="rewards-card">
+          <h3 class="sidebar-title"><i class="fa-solid fa-gift"></i> Rewards Table</h3>
+          <ul class="points-list">
+            <li><span>100 - 200 Pts</span> <strong>5% Off</strong></li>
+            <li><span>210 - 450 Pts</span> <strong>10% Off</strong></li>
+            <li><span>460+ Pts</span> <strong>20% Off</strong></li>
+          </ul>
+        </div>
+        
+        <div class="rewards-card" style="text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+             <i class="fa-solid fa-trophy" style="font-size: 3rem; color: var(--accent-color); margin-bottom: 15px; opacity: 0.5;"></i>
+             <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0;">Reach the top tier to win the maximum 20% discount code!</p>
+        </div>
+
+        <div class="rules-card">
+          <h3 class="sidebar-title"><i class="fa-solid fa-lightbulb"></i> Pro Tips</h3>
+          <ul class="points-list" style="font-size: 0.9rem; line-height: 1.4;">
+            <li style="border: none; padding: 5px 0;"><i class="fa-solid fa-caret-right" style="color: var(--accent-color); margin-right: 8px;"></i> Hit with the extreme edge of the paddle to deflect the ball sharply and reach tight corners.</li>
+            <li style="border: none; padding: 5px 0;"><i class="fa-solid fa-caret-right" style="color: var(--accent-color); margin-right: 8px;"></i> Break a clear vertical path! Getting the ball bouncing against the top wall behind the bricks racks up huge points.</li>
+          </ul>
+        </div>
+
+        <div class="rules-card">
+          <h3 class="sidebar-title"><i class="fa-solid fa-circle-exclamation"></i> Offer Details</h3>
+          <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 0;">
+            Earned discount codes are unique to your session and expire within <strong>24 hours</strong>. Discounts cannot be combined with other ongoing promotions. Feel free to play as many times as you like to chase the highest discount tier!
+          </p>
+        </div>
+        
+        <div class="rules-card">
+          <h3 class="sidebar-title"><i class="fa-solid fa-bolt"></i> Game Mechanics</h3>
+          <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 0;">
+            Clear all <strong>50 bricks</strong> to maximize your score. Each block destroyed is worth 10 points. If the ball touches the bottom of the screen beyond your paddle, it's <strong>Game Over</strong> instantly — no extra lives!
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-brand">
+      <div class="footer-logo" onclick="window.location.href='index.html'" style="cursor: pointer;">FurniCo</div>
+      <p>Premium furniture designed for modern living. Quality craftsmanship delivered to your doorstep.</p>
+    </div>
+    <div class="footer-links">
+      <h3>Shop</h3>
+      <ul>
+        <li><a href="sofas.html">Sofas</a></li>
+        <li><a href="beds.html">Beds</a></li>
+        <li><a href="chairs.html">Chairs</a></li>
+      </ul>
+    </div>
+    <div class="footer-links">
+      <h3>Support</h3>
+      <ul>
+        <li><a href="returns.html">Returns & Refunds</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 FurniCo. All rights reserved.</p>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+
+<script>
+  // --- Brick Breaker Game Logic ---
+  const canvas = document.getElementById("gameCanvas");
+  const ctx = canvas.getContext("2d");
+  const overlay = document.getElementById("gameOverlay");
+  const overlayTitle = document.getElementById("overlayTitle");
+  const overlayMessage = document.getElementById("overlayMessage");
+  const startBtn = document.getElementById("startBtn");
+  const scoreDisplay = document.getElementById("currentScore");
+
+  // Game variables
+  let score = 0;
+  let gameRunning = false;
+  let animationId;
+
+  // Ball
+  const ballRadius = 8;
+  let x = canvas.width / 2;
+  let y = canvas.height - 30;
+  let dx = 4;
+  let dy = -4;
+
+  // Paddle
+  const paddleHeight = 12;
+  const paddleWidth = 100;
+  let paddleX = (canvas.width - paddleWidth) / 2;
+
+  // Bricks
+  const brickRowCount = 5;
+  const brickColumnCount = 10;
+  const brickWidth = 65;
+  const brickHeight = 20;
+  const brickPadding = 10;
+  const brickOffsetTop = 40;
+  const brickOffsetLeft = 30;
+
+  let bricks = [];
+  
+  function initBricks() {
+    bricks = [];
+    for(let c = 0; c < brickColumnCount; c++) {
+      bricks[c] = [];
+      for(let r = 0; r < brickRowCount; r++) {
+        bricks[c][r] = { x: 0, y: 0, status: 1 };
+      }
+    }
+  }
+
+  // Input listeners
+  document.addEventListener("mousemove", mouseMoveHandler, false);
+  
+  // Touch support for mobile/tablet playing
+  canvas.addEventListener("touchmove", touchMoveHandler, {passive: false});
+
+  function mouseMoveHandler(e) {
+    if (!gameRunning) return;
+    const relativeX = e.clientX - canvas.getBoundingClientRect().left;
+    if(relativeX > 0 && relativeX < canvas.width) {
+      paddleX = relativeX - paddleWidth / 2;
+    }
+  }
+
+  function touchMoveHandler(e) {
+    if (!gameRunning) return;
+    e.preventDefault(); // prevent scrolling while playing
+    const relativeX = e.touches[0].clientX - canvas.getBoundingClientRect().left;
+    if(relativeX > 0 && relativeX < canvas.width) {
+      paddleX = relativeX - paddleWidth / 2;
+    }
+  }
+
+  // Drawing functions
+  function drawBall() {
+    ctx.beginPath();
+    ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
+    ctx.fillStyle = "#ffdb58";
+    ctx.shadowBlur = 12;
+    ctx.shadowColor = "#ffdb58";
+    ctx.fill();
+    ctx.closePath();
+    ctx.shadowBlur = 0; // reset shadow for performance
+  }
+
+  function drawPaddle() {
+    ctx.beginPath();
+    // Using roundRect for a smoother modern pill-shape
+    if (ctx.roundRect) {
+      ctx.roundRect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight, paddleHeight / 2);
+    } else {
+      ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight); // fallback
+    }
+    
+    // Create a sleek metallic gradient for the paddle
+    let gradient = ctx.createLinearGradient(0, canvas.height - paddleHeight, 0, canvas.height);
+    gradient.addColorStop(0, "#ffffff");
+    gradient.addColorStop(1, "#b3b3b3");
+    
+    ctx.fillStyle = gradient;
+    ctx.shadowBlur = 15;
+    ctx.shadowColor = "rgba(255, 255, 255, 0.4)";
+    ctx.fill();
+    ctx.closePath();
+    ctx.shadowBlur = 0; 
+  }
+
+  function drawBricks() {
+    for(let c = 0; c < brickColumnCount; c++) {
+      for(let r = 0; r < brickRowCount; r++) {
+        if(bricks[c][r].status === 1) {
+          const brickX = (c * (brickWidth + brickPadding)) + brickOffsetLeft;
+          const brickY = (r * (brickHeight + brickPadding)) + brickOffsetTop;
+          bricks[c][r].x = brickX;
+          bricks[c][r].y = brickY;
+          
+          ctx.beginPath();
+          if (ctx.roundRect) {
+             ctx.roundRect(brickX, brickY, brickWidth, brickHeight, 5);
+          } else {
+             ctx.rect(brickX, brickY, brickWidth, brickHeight);
+          }
+          
+          // Color gradient logic creating a rainbow cascade effect
+          let hue = 180 + (r * 25) + (c * 5); // Smooth shift across rows and columns
+          ctx.fillStyle = `hsl(${hue}, 85%, 60%)`;
+          ctx.shadowBlur = 8;
+          ctx.shadowColor = `hsl(${hue}, 85%, 60%)`;
+          ctx.fill();
+          ctx.closePath();
+          ctx.shadowBlur = 0;
+        }
+      }
+    }
+  }
+
+  function collisionDetection() {
+    for(let c = 0; c < brickColumnCount; c++) {
+      for(let r = 0; r < brickRowCount; r++) {
+        const b = bricks[c][r];
+        if(b.status === 1) {
+          if(x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight) {
+            dy = -dy;
+            b.status = 0;
+            score += 10;
+            scoreDisplay.textContent = score;
+            
+            if(score === brickRowCount * brickColumnCount * 10) {
+              endGame(true);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  function applyDiscount(finalScore) {
+    let rate = 0;
+    let percentage = 0;
+    let code = "";
+
+    if(finalScore >= 100 && finalScore <= 200) { rate = 0.05; percentage = 5; code = 'WIN5'; }
+    else if(finalScore > 200 && finalScore <= 450) { rate = 0.10; percentage = 10; code = 'WIN10'; }
+    else if(finalScore > 450) { rate = 0.20; percentage = 20; code = 'WIN20'; }
+
+    if (rate > 0) {
+      overlayMessage.innerHTML = `Amazing! You scored ${finalScore} points.<br><br><strong>You won a ${percentage}% discount code!</strong><br><br>Use code: <strong id="gameDiscountCode" title="Click to copy" style="cursor: pointer; background: var(--accent-color); color: white; padding: 10px 20px; border-radius: 5px;">${code}</strong> at checkout.`;
+      
+      setTimeout(() => {
+        const codeElement = document.getElementById('gameDiscountCode');
+        if(codeElement) {
+          codeElement.addEventListener('click', () => {
+             navigator.clipboard.writeText(code);
+             codeElement.innerText = "COPIED!";
+             setTimeout(() => { codeElement.innerText = code; }, 2000);
+          });
+        }
+      }, 50);
+    } else {
+      overlayMessage.innerHTML = `Game Over! You scored ${finalScore} points.<br>Not enough for a discount this time. Try again!`;
+    }
+  }
+
+  function endGame(isWin) {
+    gameRunning = false;
+    cancelAnimationFrame(animationId);
+    
+    overlay.classList.remove("hidden");
+    if (isWin) {
+      overlayTitle.textContent = "You Win!";
+      overlayTitle.style.color = "#2ecc71";
+    } else {
+      overlayTitle.textContent = "Game Over";
+      overlayTitle.style.color = "#e74c3c";
+    }
+    
+    startBtn.textContent = "Play Again";
+    applyDiscount(score);
+  }
+
+  function draw() {
+    if (!gameRunning) return;
+    
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawBricks();
+    drawBall();
+    drawPaddle();
+    collisionDetection();
+
+    // Wall collision
+    if(x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
+      dx = -dx;
+    }
+    if(y + dy < ballRadius) {
+      dy = -dy;
+    } else if(y + dy > canvas.height - ballRadius) {
+      // Paddle collision
+      if(x > paddleX && x < paddleX + paddleWidth) {
+        dy = -dy;
+        // Adjust angle based on where it hit paddle (optional simple physics)
+        let hitPoint = x - (paddleX + paddleWidth/2);
+        dx = hitPoint * 0.15;
+      } else {
+        // Bottom bounds - Game Over
+        endGame(false);
+        return;
+      }
+    }
+
+    x += dx;
+    y += dy;
+
+    animationId = requestAnimationFrame(draw);
+  }
+
+  function startGame() {
+    overlay.classList.add("hidden");
+    score = 0;
+    scoreDisplay.textContent = score;
+    x = canvas.width / 2;
+    y = canvas.height - 30;
+    dx = 4 * (Math.random() > 0.5 ? 1 : -1);
+    dy = -4;
+    paddleX = (canvas.width - paddleWidth) / 2;
+    initBricks();
+    
+    // Clear any previous discount if they play again to be fair
+    localStorage.removeItem('furnicoDiscountRate');
+    
+    gameRunning = true;
+    draw();
+  }
+
+  startBtn.addEventListener("click", startGame);
+
+  // Initial draw so the canvas isn't entirely black
+  initBricks();
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawBricks();
+  drawPaddle();
+
+</script>
+</body>
+</html>

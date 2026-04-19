@@ -343,13 +343,17 @@ document.addEventListener('DOMContentLoaded', () => {
       const code = couponInput.value.trim().toUpperCase();
       let rate = 0;
       
-      if (code === 'WELCOME10') {
+      if (code === 'WELCOME10' || code === 'WIN10') {
         rate = 0.10;
         couponMessage.textContent = "10% Discount Applied!";
         couponMessage.className = "success";
-      } else if (code === 'FURNI20') {
+      } else if (code === 'FURNI20' || code === 'WIN20') {
         rate = 0.20;
         couponMessage.textContent = "20% Discount Applied!";
+        couponMessage.className = "success";
+      } else if (code === 'WIN5') {
+        rate = 0.05;
+        couponMessage.textContent = "5% Discount Applied!";
         couponMessage.className = "success";
       } else {
         rate = 0;
