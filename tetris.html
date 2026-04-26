@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Brick Breaker | FurniCo</title>
+  <title>Tetris | FurniCo</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
@@ -22,9 +22,14 @@
       box-shadow: 0 30px 60px rgba(0,0,0,0.6), inset 0 2px 0px rgba(255,255,255,0.1);
       padding: 30px;
       border: 1px solid rgba(255,255,255,0.05);
-      flex: 1;
-      min-width: 300px;
-      max-width: 860px;
+      width: 100%;
+      max-width: 1000px;
+      aspect-ratio: 16 / 9;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 20px;
+      overflow: hidden;
     }
     .game-console::after {
       content: '';
@@ -40,11 +45,16 @@
       box-shadow: 0 0 30px rgba(226, 177, 60, 0.15), inset 0 0 30px rgba(0,0,0,0.8);
       display: block;
       margin: 0 auto;
-      max-width: 100%;
       border: 2px solid rgba(255,255,255,0.03);
       position: relative;
       z-index: 2;
       image-rendering: pixelated;
+      height: 100%;
+      max-height: 100%;
+      min-height: 0;
+      min-width: 0;
+      width: auto;
+      object-fit: contain;
     }
     #gameOverlay {
       position: absolute;
@@ -83,14 +93,32 @@
       max-width: 80%;
       text-align: center;
     }
-    .game-header {
+    .panel-left {
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
+      justify-content: center;
       align-items: center;
-      margin-bottom: 25px;
-      padding: 0 10px;
-      position: relative;
+      gap: 30px;
+      height: 100%;
       z-index: 2;
+    }
+    .panel-right {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      z-index: 2;
+    }
+    .game-board-container {
+      height: 100%;
+      min-height: 0;
+      padding: 10px 0;
+      box-sizing: border-box;
+      z-index: 2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
     .game-title {
       color: var(--accent-color);
@@ -105,13 +133,18 @@
       font-weight: 800;
       color: #fff;
       background: rgba(255,255,255,0.05);
-      padding: 10px 25px;
-      border-radius: 30px;
+      padding: 15px 30px;
+      border-radius: 20px;
       border: 1px solid rgba(255,255,255,0.1);
       box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
+      text-align: center;
+      line-height: 1.2;
     }
     .game-score-display span {
+      display: block;
+      font-size: 2.5rem;
       color: var(--accent-color);
+      margin-top: 5px;
     }
     .game-info-panel {
       width: 100%;
@@ -180,6 +213,34 @@
       transform: translateY(-2px);
       box-shadow: 0 6px 25px rgba(226, 177, 60, 0.6);
     }
+    .mobile-controls {
+      display: grid;
+      grid-template-columns: 60px 60px 60px;
+      gap: 15px;
+      justify-content: center;
+      align-items: center;
+    }
+    .control-btn {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #1f1f2e, #161622);
+      border: 2px solid rgba(226, 177, 60, 0.3);
+      color: var(--accent-color);
+      font-size: 1.5rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      box-shadow: 5px 5px 10px rgba(0,0,0,0.5), -2px -2px 10px rgba(255,255,255,0.05), inset 0 2px 5px rgba(255,255,255,0.1);
+      transition: all 0.1s ease;
+    }
+    .control-btn:active {
+      transform: scale(0.92) translateY(2px);
+      box-shadow: inset 3px 3px 8px rgba(0,0,0,0.6), inset -2px -2px 5px rgba(255,255,255,0.05);
+      background: var(--accent-color);
+      color: #fff;
+    }
   </style>
 </head>
 <body>
@@ -208,16 +269,27 @@
     <div class="game-layout">
       <!-- Game Console -->
       <div class="game-console">
-        <div class="game-header">
-          <h1 class="game-title">Brick Breaker</h1>
-          <div class="game-score-display">SCORE <span id="currentScore">0</span></div>
+        <div class="panel-left">
+          <h1 class="game-title">Tetris</h1>
+          <div class="game-score-display">SCORE<br><span id="currentScore">0</span></div>
         </div>
         
-        <canvas id="gameCanvas" width="800" height="400"></canvas>
+        <div class="game-board-container">
+           <canvas id="gameCanvas" width="300" height="600"></canvas>
+        </div>
+        
+        <div class="panel-right">
+          <div class="mobile-controls">
+             <button class="control-btn" id="btnRotate" style="grid-column: 2; grid-row: 1;" aria-label="Rotate"><i class="fa-solid fa-rotate-right"></i></button>
+             <button class="control-btn" id="btnLeft" style="grid-column: 1; grid-row: 2;" aria-label="Move Left"><i class="fa-solid fa-arrow-left"></i></button>
+             <button class="control-btn" id="btnDown" style="grid-column: 2; grid-row: 2;" aria-label="Move Down"><i class="fa-solid fa-arrow-down"></i></button>
+             <button class="control-btn" id="btnRight" style="grid-column: 3; grid-row: 2;" aria-label="Move Right"><i class="fa-solid fa-arrow-right"></i></button>
+          </div>
+        </div>
         
         <div id="gameOverlay">
           <h2 id="overlayTitle">Arcade Mode</h2>
-          <p id="overlayMessage">Destroy the bricks to earn exclusive discount points!</p>
+          <p id="overlayMessage">Clear lines to earn exclusive discount points!</p>
           <div>
             <button class="btn-arcade" id="startBtn" style="margin: 10px; padding: 15px 50px; font-size: 1.2rem;">Start Playing</button>
           </div>
@@ -229,7 +301,7 @@
         <div class="rules-card">
           <h3 class="sidebar-title"><i class="fa-solid fa-book-open"></i> How to Play</h3>
           <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 0;">
-            Use your mouse or swipe to move the paddle. Bounce the ball to break all bricks. Don't let the ball hit the floor!
+            Use Arrow Keys or WASD to move and rotate the falling blocks. Form complete lines horizontally to clear them and earn points. The game speeds up as you score!
           </p>
         </div>
 
@@ -250,8 +322,8 @@
         <div class="rules-card">
           <h3 class="sidebar-title"><i class="fa-solid fa-lightbulb"></i> Pro Tips</h3>
           <ul class="points-list" style="font-size: 0.9rem; line-height: 1.4;">
-            <li style="border: none; padding: 5px 0;"><i class="fa-solid fa-caret-right" style="color: var(--accent-color); margin-right: 8px;"></i> Hit with the extreme edge of the paddle to deflect the ball sharply and reach tight corners.</li>
-            <li style="border: none; padding: 5px 0;"><i class="fa-solid fa-caret-right" style="color: var(--accent-color); margin-right: 8px;"></i> Break a clear vertical path! Getting the ball bouncing against the top wall behind the bricks racks up huge points.</li>
+            <li style="border: none; padding: 5px 0;"><i class="fa-solid fa-caret-right" style="color: var(--accent-color); margin-right: 8px;"></i> Clearing multiple lines at once gives you bonus points! (e.g. 4 lines = 80 points)</li>
+            <li style="border: none; padding: 5px 0;"><i class="fa-solid fa-caret-right" style="color: var(--accent-color); margin-right: 8px;"></i> Keep your stack flat and wait for the long "I" piece to score a Tetris.</li>
           </ul>
         </div>
 
@@ -265,7 +337,7 @@
         <div class="rules-card">
           <h3 class="sidebar-title"><i class="fa-solid fa-bolt"></i> Game Mechanics</h3>
           <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 0;">
-            Clear all <strong>50 bricks</strong> to maximize your score. Each block destroyed is worth 10 points. If the ball touches the bottom of the screen beyond your paddle, it's <strong>Game Over</strong> instantly — no extra lives!
+            Points: 1 Line = 10, 2 Lines = 30, 3 Lines = 50, 4 Lines = 80. If your blocks stack up to the top of the screen, it's <strong>Game Over</strong>!
           </p>
         </div>
       </div>
@@ -327,7 +399,6 @@
 <script src="script.js"></script>
 
 <script>
-  // --- Brick Breaker Game Logic ---
   const canvas = document.getElementById("gameCanvas");
   const ctx = canvas.getContext("2d");
   const overlay = document.getElementById("gameOverlay");
@@ -336,171 +407,265 @@
   const startBtn = document.getElementById("startBtn");
   const scoreDisplay = document.getElementById("currentScore");
 
-  // Game variables
+  const ROWS = 20;
+  const COLS = 10;
+  const BLOCK_SIZE = 30; // 300x600
+
+  let board = [];
   let score = 0;
   let gameRunning = false;
-  let animationId;
+  let gameInterval;
+  let dropSpeed = 1000;
+  let lastDropTime = 0;
 
-  // Ball
-  const ballRadius = 8;
-  let x = canvas.width / 2;
-  let y = canvas.height - 30;
-  let dx = 4;
-  let dy = -4;
+  const COLORS = [
+    null,
+    '#FF0D72', // T
+    '#0DC2FF', // I
+    '#0DFF72', // S
+    '#F538FF', // Z
+    '#FF8E0D', // L
+    '#FFE138', // J
+    '#3877FF'  // O
+  ];
 
-  // Paddle
-  const paddleHeight = 12;
-  const paddleWidth = 100;
-  let paddleX = (canvas.width - paddleWidth) / 2;
-  let rightPressed = false;
-  let leftPressed = false;
+  const SHAPES = [
+    [],
+    [ [0,0,0], [1,1,1], [0,1,0] ], // T
+    [ [0,2,0,0], [0,2,0,0], [0,2,0,0], [0,2,0,0] ], // I
+    [ [0,3,3], [3,3,0], [0,0,0] ], // S
+    [ [4,4,0], [0,4,4], [0,0,0] ], // Z
+    [ [0,5,0], [0,5,0], [0,5,5] ], // L
+    [ [0,6,0], [0,6,0], [6,6,0] ], // J
+    [ [7,7], [7,7] ] // O
+  ];
 
-  // Bricks
-  const brickRowCount = 5;
-  const brickColumnCount = 10;
-  const brickWidth = 65;
-  const brickHeight = 20;
-  const brickPadding = 10;
-  const brickOffsetTop = 40;
-  const brickOffsetLeft = 30;
+  let currentPiece = {
+    matrix: [],
+    pos: {x: 0, y: 0}
+  };
 
-  let bricks = [];
-  
-  function initBricks() {
-    bricks = [];
-    for(let c = 0; c < brickColumnCount; c++) {
-      bricks[c] = [];
-      for(let r = 0; r < brickRowCount; r++) {
-        bricks[c][r] = { x: 0, y: 0, status: 1 };
-      }
+  function createMatrix(w, h) {
+    const matrix = [];
+    while (h--) {
+      matrix.push(new Array(w).fill(0));
     }
+    return matrix;
   }
 
-  // Input listeners
-  document.addEventListener("mousemove", mouseMoveHandler, false);
-  document.addEventListener("keydown", keyDownHandler, false);
-  document.addEventListener("keyup", keyUpHandler, false);
-
-  function keyDownHandler(e) {
-    if(e.key == "Right" || e.key == "ArrowRight" || e.key.toLowerCase() == "d") {
-      rightPressed = true;
-    }
-    else if(e.key == "Left" || e.key == "ArrowLeft" || e.key.toLowerCase() == "a") {
-      leftPressed = true;
-    }
-  }
-
-  function keyUpHandler(e) {
-    if(e.key == "Right" || e.key == "ArrowRight" || e.key.toLowerCase() == "d") {
-      rightPressed = false;
-    }
-    else if(e.key == "Left" || e.key == "ArrowLeft" || e.key.toLowerCase() == "a") {
-      leftPressed = false;
-    }
-  }
-  
-  // Touch support for mobile/tablet playing
-  canvas.addEventListener("touchmove", touchMoveHandler, {passive: false});
-
-  function mouseMoveHandler(e) {
-    if (!gameRunning) return;
-    const relativeX = e.clientX - canvas.getBoundingClientRect().left;
-    if(relativeX > 0 && relativeX < canvas.width) {
-      paddleX = relativeX - paddleWidth / 2;
-    }
-  }
-
-  function touchMoveHandler(e) {
-    if (!gameRunning) return;
-    e.preventDefault(); // prevent scrolling while playing
-    const relativeX = e.touches[0].clientX - canvas.getBoundingClientRect().left;
-    if(relativeX > 0 && relativeX < canvas.width) {
-      paddleX = relativeX - paddleWidth / 2;
-    }
-  }
-
-  // Drawing functions
-  function drawBall() {
-    ctx.beginPath();
-    ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
-    ctx.fillStyle = "#ffdb58";
-    ctx.shadowBlur = 12;
-    ctx.shadowColor = "#ffdb58";
-    ctx.fill();
-    ctx.closePath();
-    ctx.shadowBlur = 0; // reset shadow for performance
-  }
-
-  function drawPaddle() {
-    ctx.beginPath();
-    // Using roundRect for a smoother modern pill-shape
-    if (ctx.roundRect) {
-      ctx.roundRect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight, paddleHeight / 2);
-    } else {
-      ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight); // fallback
-    }
-    
-    // Create a sleek metallic gradient for the paddle
-    let gradient = ctx.createLinearGradient(0, canvas.height - paddleHeight, 0, canvas.height);
-    gradient.addColorStop(0, "#ffffff");
-    gradient.addColorStop(1, "#b3b3b3");
-    
-    ctx.fillStyle = gradient;
-    ctx.shadowBlur = 15;
-    ctx.shadowColor = "rgba(255, 255, 255, 0.4)";
-    ctx.fill();
-    ctx.closePath();
-    ctx.shadowBlur = 0; 
-  }
-
-  function drawBricks() {
-    for(let c = 0; c < brickColumnCount; c++) {
-      for(let r = 0; r < brickRowCount; r++) {
-        if(bricks[c][r].status === 1) {
-          const brickX = (c * (brickWidth + brickPadding)) + brickOffsetLeft;
-          const brickY = (r * (brickHeight + brickPadding)) + brickOffsetTop;
-          bricks[c][r].x = brickX;
-          bricks[c][r].y = brickY;
-          
-          ctx.beginPath();
-          if (ctx.roundRect) {
-             ctx.roundRect(brickX, brickY, brickWidth, brickHeight, 5);
-          } else {
-             ctx.rect(brickX, brickY, brickWidth, brickHeight);
-          }
-          
-          // Color gradient logic creating a rainbow cascade effect
-          let hue = 180 + (r * 25) + (c * 5); // Smooth shift across rows and columns
-          ctx.fillStyle = `hsl(${hue}, 85%, 60%)`;
+  function drawMatrix(matrix, offset) {
+    matrix.forEach((row, y) => {
+      row.forEach((value, x) => {
+        if (value !== 0) {
+          ctx.fillStyle = COLORS[value];
           ctx.shadowBlur = 8;
-          ctx.shadowColor = `hsl(${hue}, 85%, 60%)`;
-          ctx.fill();
-          ctx.closePath();
+          ctx.shadowColor = COLORS[value];
+          ctx.fillRect((x + offset.x) * BLOCK_SIZE, (y + offset.y) * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+          ctx.strokeStyle = "rgba(0,0,0,0.5)";
           ctx.shadowBlur = 0;
+          ctx.strokeRect((x + offset.x) * BLOCK_SIZE, (y + offset.y) * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
         }
+      });
+    });
+  }
+
+  function draw() {
+    ctx.fillStyle = "rgba(10, 10, 15, 1)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    // Draw grid
+    ctx.strokeStyle = "rgba(255,255,255,0.05)";
+    for (let i=0; i<COLS; i++) {
+        for(let j=0; j<ROWS; j++){
+            ctx.strokeRect(i*BLOCK_SIZE, j*BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+        }
+    }
+
+    drawMatrix(board, {x: 0, y: 0});
+    if(gameRunning) drawMatrix(currentPiece.matrix, currentPiece.pos);
+  }
+
+  function merge(board, piece) {
+    piece.matrix.forEach((row, y) => {
+      row.forEach((value, x) => {
+        if (value !== 0) {
+          board[y + piece.pos.y][x + piece.pos.x] = value;
+        }
+      });
+    });
+  }
+
+  function collide(board, piece) {
+    const m = piece.matrix;
+    const o = piece.pos;
+    for (let y = 0; y < m.length; ++y) {
+      for (let x = 0; x < m[y].length; ++x) {
+        if (m[y][x] !== 0 &&
+           (board[y + o.y] && board[y + o.y][x + o.x]) !== 0) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  function rotate(matrix, dir) {
+    for (let y = 0; y < matrix.length; ++y) {
+      for (let x = 0; x < y; ++x) {
+        [
+          matrix[x][y],
+          matrix[y][x],
+        ] = [
+          matrix[y][x],
+          matrix[x][y],
+        ];
+      }
+    }
+    if (dir > 0) {
+      matrix.forEach(row => row.reverse());
+    } else {
+      matrix.reverse();
+    }
+  }
+
+  function playerRotate(dir) {
+    const pos = currentPiece.pos.x;
+    let offset = 1;
+    rotate(currentPiece.matrix, dir);
+    while (collide(board, currentPiece)) {
+      currentPiece.pos.x += offset;
+      offset = -(offset + (offset > 0 ? 1 : -1));
+      if (offset > currentPiece.matrix[0].length) {
+        rotate(currentPiece.matrix, -dir);
+        currentPiece.pos.x = pos;
+        return;
       }
     }
   }
 
-  function collisionDetection() {
-    for(let c = 0; c < brickColumnCount; c++) {
-      for(let r = 0; r < brickRowCount; r++) {
-        const b = bricks[c][r];
-        if(b.status === 1) {
-          if(x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight) {
-            dy = -dy;
-            b.status = 0;
-            score += 10;
-            scoreDisplay.textContent = score;
-            
-            if(score === brickRowCount * brickColumnCount * 10) {
-              endGame(true);
-            }
-          }
-        }
-      }
+  function playerMove(offset) {
+    currentPiece.pos.x += offset;
+    if (collide(board, currentPiece)) {
+      currentPiece.pos.x -= offset;
     }
   }
+
+  function playerDrop() {
+    currentPiece.pos.y++;
+    if (collide(board, currentPiece)) {
+      currentPiece.pos.y--;
+      merge(board, currentPiece);
+      resetPiece();
+      arenaSweep();
+    }
+    lastDropTime = 0; // reset drop counter
+  }
+
+  function resetPiece() {
+    const typeId = Math.floor(Math.random() * 7) + 1;
+    currentPiece.matrix = [];
+    SHAPES[typeId].forEach(row => currentPiece.matrix.push([...row]));
+    currentPiece.pos.y = 0;
+    currentPiece.pos.x = Math.floor((COLS / 2) - (currentPiece.matrix[0].length / 2));
+
+    if (collide(board, currentPiece)) {
+      // Game Over
+      endGame(score);
+    }
+  }
+
+  function arenaSweep() {
+    let rowCount = 0;
+    outer: for (let y = board.length - 1; y >= 0; --y) {
+      for (let x = 0; x < board[y].length; ++x) {
+        if (board[y][x] === 0) {
+          continue outer;
+        }
+      }
+
+      const row = board.splice(y, 1)[0].fill(0);
+      board.unshift(row);
+      ++y;
+      rowCount++;
+    }
+
+    if (rowCount > 0) {
+      if (rowCount === 1) score += 10;
+      else if (rowCount === 2) score += 30;
+      else if (rowCount === 3) score += 50;
+      else if (rowCount >= 4) score += 80;
+      scoreDisplay.textContent = score;
+      
+      // Increase speed as score gets higher
+      dropSpeed = Math.max(100, 1000 - (Math.floor(score / 50) * 50));
+    }
+  }
+
+  function update(time = 0) {
+    if (!gameRunning) return;
+
+    const deltaTime = time - lastDropTime;
+    
+    if (!lastDropTime) {
+      lastDropTime = time;
+    } else if (deltaTime > dropSpeed) {
+      playerDrop();
+      lastDropTime = time;
+    }
+
+    draw();
+    gameInterval = requestAnimationFrame(update);
+  }
+
+  document.addEventListener("keydown", event => {
+    if(!gameRunning) return;
+    
+    // Prevent default scrolling for arrow keys
+    if(["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "].includes(event.key)) {
+        event.preventDefault();
+    }
+
+    if (event.key === "ArrowLeft" || event.key === "a") {
+      playerMove(-1);
+    } else if (event.key === "ArrowRight" || event.key === "d") {
+      playerMove(1);
+    } else if (event.key === "ArrowDown" || event.key === "s") {
+      playerDrop();
+    } else if (event.key === "ArrowUp" || event.key === "w" || event.key === " ") {
+      playerRotate(1);
+    }
+  });
+
+  // On-screen controls for mobile/tablet
+  document.getElementById("btnLeft").addEventListener("click", () => { if(gameRunning) playerMove(-1); });
+  document.getElementById("btnRight").addEventListener("click", () => { if(gameRunning) playerMove(1); });
+  document.getElementById("btnDown").addEventListener("click", () => { if(gameRunning) playerDrop(); });
+  document.getElementById("btnRotate").addEventListener("click", () => { if(gameRunning) playerRotate(1); });
+  
+  // Continuous movement for on-screen controls
+  let moveInterval;
+  const startMove = (action) => {
+    if(!gameRunning) return;
+    action();
+    moveInterval = setInterval(action, 150);
+  };
+  const stopMove = () => clearInterval(moveInterval);
+
+  const setupBtn = (id, action) => {
+    const btn = document.getElementById(id);
+    btn.addEventListener("mousedown", () => startMove(action));
+    btn.addEventListener("mouseup", stopMove);
+    btn.addEventListener("mouseleave", stopMove);
+    btn.addEventListener("touchstart", (e) => { e.preventDefault(); startMove(action); });
+    btn.addEventListener("touchend", (e) => { e.preventDefault(); stopMove(); });
+  };
+
+  setupBtn("btnLeft", () => playerMove(-1));
+  setupBtn("btnRight", () => playerMove(1));
+  setupBtn("btnDown", () => playerDrop());
+  // Rotate is usually a single tap, so just click event is fine. 
+  // Wait, I already added click above for rotate.
+  document.getElementById("btnRotate").addEventListener("touchstart", (e) => { e.preventDefault(); if(gameRunning) playerRotate(1); });
 
   function applyDiscount(finalScore) {
     let rate = 0;
@@ -529,96 +694,39 @@
     }
   }
 
-  function endGame(isWin) {
+  function endGame(finalScore) {
     gameRunning = false;
-    cancelAnimationFrame(animationId);
+    cancelAnimationFrame(gameInterval);
     
     overlay.classList.remove("hidden");
-    if (isWin) {
-      overlayTitle.textContent = "You Win!";
-      overlayTitle.style.color = "#2ecc71";
-    } else {
-      overlayTitle.textContent = "Game Over";
-      overlayTitle.style.color = "#e74c3c";
-    }
+    overlayTitle.textContent = "Game Over";
+    overlayTitle.style.color = "#e74c3c";
     
     startBtn.textContent = "Play Again";
-    applyDiscount(score);
-  }
-
-  function draw() {
-    if (!gameRunning) return;
-    
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawBricks();
-    drawBall();
-    drawPaddle();
-    collisionDetection();
-
-    // Wall collision
-    if(x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
-      dx = -dx;
-    }
-    if(y + dy < ballRadius) {
-      dy = -dy;
-    } else if(y + dy > canvas.height - ballRadius) {
-      // Paddle collision
-      if(x > paddleX && x < paddleX + paddleWidth) {
-        dy = -dy;
-        // Adjust angle based on where it hit paddle (optional simple physics)
-        let hitPoint = x - (paddleX + paddleWidth/2);
-        dx = hitPoint * 0.15;
-      } else {
-        // Bottom bounds - Game Over
-        endGame(false);
-        return;
-      }
-    }
-
-    if(rightPressed) {
-      paddleX += 7;
-      if (paddleX + paddleWidth > canvas.width){
-        paddleX = canvas.width - paddleWidth;
-      }
-    }
-    else if(leftPressed) {
-      paddleX -= 7;
-      if (paddleX < 0){
-        paddleX = 0;
-      }
-    }
-
-    x += dx;
-    y += dy;
-
-    animationId = requestAnimationFrame(draw);
+    applyDiscount(finalScore);
   }
 
   function startGame() {
     overlay.classList.add("hidden");
+    board = createMatrix(COLS, ROWS);
     score = 0;
     scoreDisplay.textContent = score;
-    x = canvas.width / 2;
-    y = canvas.height - 30;
-    dx = 4 * (Math.random() > 0.5 ? 1 : -1);
-    dy = -4;
-    paddleX = (canvas.width - paddleWidth) / 2;
-    initBricks();
+    dropSpeed = 1000;
+    lastDropTime = 0;
+    resetPiece();
     
     // Clear any previous discount if they play again to be fair
     localStorage.removeItem('furnicoDiscountRate');
     
     gameRunning = true;
-    draw();
+    update();
   }
 
   startBtn.addEventListener("click", startGame);
 
-  // Initial draw so the canvas isn't entirely black
-  initBricks();
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  drawBricks();
-  drawPaddle();
+  // Initial draw
+  board = createMatrix(COLS, ROWS);
+  draw();
 
 </script>
 </body>

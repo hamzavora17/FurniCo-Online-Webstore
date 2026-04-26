@@ -10,9 +10,8 @@
 <body>
 
 <header class="navbar">
-  <div class="logo">FurniCo</div>
+  <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">FurniCo</div>
   <nav>
-    <!-- <a href="index.html">Home</a> -->
     <a href="offers.html">Offers</a>
     <a href="blog.html">Blog Spot</a>
     <a href="video-marketing.html">Video Gallery</a>
@@ -23,61 +22,93 @@
   </nav>
 </header>
 
-<section class="section">
+<section class="affiliate-hero">
+  <div class="hero-content">
+    <h1>Partner with the <span class="highlight">Future</span> of Living</h1>
+    <p>Empower your audience with sustainable design and earn premium commissions. Join the FurniCo inner circle today.</p>
+    <div style="display: flex; gap: 20px; justify-content: center;">
+      <a href="#apply" class="btn">Apply Now</a>
+      <a href="#how-it-works" class="btn btn-secondary" style="background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); color: #fff;">Learn More</a>
+    </div>
+  </div>
+</section>
+<br><br><br>
+<div class="benefit-grid">
+  <div class="benefit-card">
+    <i class="fa-solid fa-gem"></i>
+    <h4>Elite Commissions</h4>
+    <p>Earn up to 12% on every high-ticket sale with no earning caps.</p>
+  </div>
+  <div class="benefit-card">
+    <i class="fa-solid fa-fingerprint"></i>
+    <h4>Smart Tracking</h4>
+    <p>Advanced 45-day cookie window and multi-device attribution.</p>
+  </div>
+  <div class="benefit-card">
+    <i class="fa-solid fa-bolt"></i>
+    <h4>Instant Access</h4>
+    <p>Get approved and start promoting within 24 hours of applying.</p>
+  </div>
+  <div class="benefit-card">
+    <i class="fa-solid fa-medal"></i>
+    <h4>Brand Prestige</h4>
+    <p>Promote furniture that wins awards for both design and sustainability.</p>
+  </div>
+</div>
+
+<section id="how-it-works" class="process-section">
   <div class="content">
-    <div style="text-align: left; margin-bottom: 30px;">
-      <a href="index.html" style="display: inline-flex; align-items: center; padding: 10px 20px; background-color: var(--bg-white); color: var(--text-main); border-radius: var(--radius); box-shadow: var(--shadow-sm); font-weight: 500; font-size: 0.95rem; border: 1px solid rgba(0,0,0,0.05); transition: transform 0.3s, box-shadow 0.3s;"><i class="fa-solid fa-arrow-left" style="margin-right: 8px;"></i> Back to Store</a>
+    <h2 style="font-size: 3rem; margin-bottom: 20px;">The Path to <span class="highlight">Success</span></h2>
+    <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto;">Simple, transparent, and rewarding. Here is how we grow together.</p>
+    
+    <div class="process-grid">
+      <div class="process-step">
+        <div class="step-number">1</div>
+        <h4>Apply & Join</h4>
+        <p>Complete our quick application form. We review profiles based on content quality and audience alignment.</p>
+      </div>
+      <div class="process-step">
+        <div class="step-number">2</div>
+        <h4>Promote FurniCo</h4>
+        <p>Use your unique link to share our collections. Access our vault of high-end lifestyle photography and banners.</p>
+      </div>
+      <div class="process-step">
+        <div class="step-number">3</div>
+        <h4>Earn & Grow</h4>
+        <p>Get paid monthly for every sale. Top partners unlock exclusive collection previews and custom codes.</p>
+      </div>
     </div>
+  </div>
+</section>
 
-    <div class="featured-topic" style="text-align: center; border-left: none; border-top: 5px solid var(--accent-color);">
-      <span>Partner With Us</span>
-      <h2 style="text-align: center;">FurniCo Affiliate Program</h2>
-      <p style="text-align: center; max-width: 700px; margin: 0 auto;">
-        Join the FurniCo Affiliate Program and earn commissions by promoting premium, sustainable furniture. Share your love for modern design with your audience and get rewarded!
-      </p>
-    </div>
-
-    <div class="features" style="max-width: 1000px; margin: 50px auto 0;">
-      <div class="feature" style="text-align: center;">
-        <i class="fa-solid fa-percent" style="font-size: 2.5rem; color: var(--accent-color); margin-bottom: 15px; display: block;"></i>
-        <h4 style="margin-bottom: 5px;">High Commissions</h4>
-        <p>Earn up to 10% commission on every successful referral sale.</p>
+<section id="apply" class="apply-container">
+  <div class="glass-form-card">
+    <h2>Secure Your Spot</h2>
+    <p>Our program is currently open to select creators and partners who value quality design.</p>
+    
+    <form id="contactForm" class="contact-form">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+        <input type="text" placeholder="Full Name" class="glass-input" required>
+        <input type="email" placeholder="Email Address" class="glass-input" required>
       </div>
-      <div class="feature" style="text-align: center;">
-        <i class="fa-solid fa-cookie-bite" style="font-size: 2.5rem; color: var(--accent-color); margin-bottom: 15px; display: block;"></i>
-        <h4 style="margin-bottom: 5px;">30-Day Cookie</h4>
-        <p>Get credited for purchases made within 30 days of the initial click.</p>
-      </div>
-      <div class="feature" style="text-align: center;">
-        <i class="fa-solid fa-wallet" style="font-size: 2.5rem; color: var(--accent-color); margin-bottom: 15px; display: block;"></i>
-        <h4 style="margin-bottom: 5px;">Monthly Payouts</h4>
-        <p>Reliable and fast monthly payments via PayPal or Bank Transfer.</p>
-      </div>
-      <div class="feature" style="text-align: center;">
-        <i class="fa-solid fa-bullhorn" style="font-size: 2.5rem; color: var(--accent-color); margin-bottom: 15px; display: block;"></i>
-        <h4 style="margin-bottom: 5px;">Marketing Assets</h4>
-        <p>Access high-quality banners, images, and custom promotional codes.</p>
-      </div>
-    </div>
-
-    <div id="apply" style="max-width: 600px; margin: 60px auto 0;">
-      <h3 style="text-align: center; margin-bottom: 20px;">Apply for the Program</h3>
-      <form id="contactForm" class="contact-form">
-        <input type="text" placeholder="Full Name" required>
-        <input type="email" placeholder="Email Address" required>
-        <input type="text" placeholder="Website or Social Media Profile URL" required>
-        <textarea placeholder="How do you plan to promote FurniCo to your audience?" rows="4" required></textarea>
-        <button type="submit" class="btn" style="width: 100%;">Submit Application</button>
-      </form>
-    </div>
+      <input type="text" placeholder="Primary Platform (Website, Instagram, YouTube)" class="glass-input" style="width: 100%; margin-bottom: 20px;" required>
+      <textarea placeholder="Tell us why you'd be a great FurniCo partner..." class="glass-input" rows="4" style="width: 100%; margin-bottom: 30px;" required></textarea>
+      <button type="submit" class="btn" style="width: 100%; padding: 20px; font-size: 1.1rem; background: var(--accent-color); border: none;">Submit Partnership Request</button>
+    </form>
   </div>
 </section>
 
 <footer class="footer">
   <div class="footer-content">
     <div class="footer-brand">
-      <div class="footer-logo" onclick="window.location.href='index.html'">FurniCo</div>
+      <div class="footer-logo" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">FurniCo</div>
       <p>Premium furniture designed for modern living. Quality craftsmanship delivered to your doorstep.</p>
+      <div class="social-links">
+        <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="#" aria-label="Twitter"><i class="fa-brands fa-twitter"></i></a>
+        <a href="#" aria-label="Pinterest"><i class="fa-brands fa-pinterest"></i></a>
+      </div>
     </div>
     <div class="footer-links">
       <h3>Shop</h3>
@@ -98,6 +129,14 @@
         <li><a href="privacy.html">Privacy Policy</a></li>
         <li><a href="terms.html">Terms & Conditions</a></li>
       </ul>
+    </div>
+    <div class="footer-newsletter">
+      <h3>Stay Updated</h3>
+      <p>Subscribe for exclusive offers and design inspiration.</p>
+      <form id="newsletterForm" class="newsletter-form">
+        <input type="email" placeholder="Your email address" required>
+        <button type="submit" aria-label="Subscribe"><i class="fa-solid fa-arrow-right"></i></button>
+      </form>
     </div>
   </div>
   <div class="footer-bottom">

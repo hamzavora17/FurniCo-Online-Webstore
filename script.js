@@ -3,7 +3,7 @@ console.log("FurniCo marketing website loaded");
 // --- Page Loader Logic ---
 setTimeout(() => {
   document.body.classList.add('loaded');
-}, 100);
+}, 1000);
 
 // --- Dark Mode Logic ---
 const themeToggle = document.getElementById('themeToggle');
@@ -38,6 +38,15 @@ if (themeToggle) {
 // --- Navbar Scroll Effect ---
 const navbar = document.querySelector('.navbar');
 if (navbar) {
+  const navLogo = navbar.querySelector('.logo');
+  if (navLogo) {
+    navLogo.style.cursor = 'pointer';
+    navLogo.removeAttribute('onclick');
+    navLogo.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
   let isScrolling = false;
   window.addEventListener('scroll', () => {
     if (!isScrolling) {
@@ -263,7 +272,7 @@ function renderCart() {
         <img src="${item.imageSrc}" alt="${item.name}" class="cart-item-img">
         <div class="cart-item-details">
           <h4>${item.name}</h4>
-          <p>$${item.price.toFixed(2)}</p>
+          <p>₹${item.price.toFixed(2)}</p>
         </div>
         <div class="cart-item-quantity">
           <button onclick="updateQuantity(${index}, -1)" aria-label="Decrease quantity">-</button>
@@ -271,7 +280,7 @@ function renderCart() {
           <button onclick="updateQuantity(${index}, 1)" aria-label="Increase quantity">+</button>
         </div>
         <div class="cart-item-subtotal">
-          <strong>$${itemTotal.toFixed(2)}</strong>
+          <strong>₹${itemTotal.toFixed(2)}</strong>
         </div>
         <div class="cart-item-remove">
           <button onclick="removeFromCart(${index})" aria-label="Remove item">&times;</button>
@@ -284,14 +293,14 @@ function renderCart() {
     const discountAmount = subtotal * discountRate;
     const total = subtotal - discountAmount;
 
-    subtotalDisplay.textContent = `$${subtotal.toFixed(2)}`;
+    subtotalDisplay.textContent = `₹${subtotal.toFixed(2)}`;
     
     if (discountRow && discountDisplay) {
       discountRow.style.display = discountRate > 0 ? 'flex' : 'none';
-      discountDisplay.textContent = `-$${discountAmount.toFixed(2)}`;
+      discountDisplay.textContent = `-₹${discountAmount.toFixed(2)}`;
     }
 
-    totalDisplay.textContent = `$${total.toFixed(2)}`;
+    totalDisplay.textContent = `₹${total.toFixed(2)}`;
   }
 }
 
@@ -324,10 +333,10 @@ document.addEventListener('DOMContentLoaded', () => {
       let total = 0;
       lastOrder.forEach(item => {
         const itemTotal = item.price * (item.quantity || 1);
-        html += `<li><span>${item.name} (x${item.quantity || 1})</span><span>$${itemTotal.toFixed(2)}</span></li>`;
+        html += `<li><span>${item.name} (x${item.quantity || 1})</span><span>₹${itemTotal.toFixed(2)}</span></li>`;
         total += itemTotal;
       });
-      html += `</ul><div class="order-total"><strong>Total: $${total.toFixed(2)}</strong></div>`;
+      html += `</ul><div class="order-total"><strong>Total: ₹${total.toFixed(2)}</strong></div>`;
       orderSummary.innerHTML = html;
     }
   }
@@ -508,46 +517,9 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-// --- Newsletter Modal Logic ---
+// --- Sale Popup Auto-Show Logic ---
 document.addEventListener('DOMContentLoaded', () => {
-  const modal = document.getElementById('newsletterModal');
-  const closeModal = modal ? modal.querySelector('.close-modal') : null;
-  const modalForm = document.getElementById('modalNewsletterForm');
-
-  if (modal && closeModal) {
-    // Show modal after 5 seconds (using sessionStorage to show only once per session)
-    if (!sessionStorage.getItem('newsletterShown')) {
-      setTimeout(() => {
-        modal.classList.add('show');
-        sessionStorage.setItem('newsletterShown', 'true');
-      }, 5000);
-    } else {
-      // If newsletter already shown, try showing sale popup after a short delay
-      setTimeout(showSalePopup, 2000);
-    }
-
-    closeModal.addEventListener('click', () => {
-      modal.classList.remove('show');
-      setTimeout(showSalePopup, 500);
-    });
-
-    // Close if clicking outside the modal content
-    window.addEventListener('click', (e) => {
-      if (e.target === modal) {
-        modal.classList.remove('show');
-        setTimeout(showSalePopup, 500);
-      }
-    });
-
-    if (modalForm) {
-      modalForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        alert("Success! Use code WELCOME10 for 10% off.");
-        modal.classList.remove('show');
-        setTimeout(showSalePopup, 500);
-      });
-    }
-  }
+  setTimeout(showSalePopup, 2000);
 });
 
 // --- Notify Modal Logic ---
@@ -608,10 +580,10 @@ if (priceFilter) {
         
         let show = false;
         if (range === 'all') show = true;
-        else if (range === '0-200' && price < 200) show = true;
-        else if (range === '200-500' && price >= 200 && price <= 500) show = true;
-        else if (range === '500-1000' && price >= 500 && price <= 1000) show = true;
-        else if (range === '1000+' && price > 1000) show = true;
+        else if (range === '0-16000' && price < 16000) show = true;
+        else if (range === '16000-40000' && price >= 16000 && price <= 40000) show = true;
+        else if (range === '40000-80000' && price >= 40000 && price <= 80000) show = true;
+        else if (range === '80000+' && price > 80000) show = true;
 
         card.style.display = show ? 'block' : 'none';
       }

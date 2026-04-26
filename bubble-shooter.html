@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en" style="scroll-behavior: smooth;">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bubble Shooter | FurniCo</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    .game-layout {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .game-console {
+      position: relative;
+      background: linear-gradient(145deg, #1a1a24, #121218);
+      border-radius: 24px;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.6), inset 0 2px 0px rgba(255,255,255,0.1);
+      padding: 30px;
+      border: 1px solid rgba(255,255,255,0.05);
+      width: 100%;
+      max-width: 1000px;
+      aspect-ratio: 16 / 9;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 20px;
+      overflow: hidden;
+    }
+    .game-console::after {
+      content: '';
+      position: absolute;
+      top: 15px; left: 15px; right: 15px; bottom: 15px;
+      border: 2px solid rgba(226, 177, 60, 0.05);
+      border-radius: 14px;
+      pointer-events: none;
+    }
+    canvas {
+      background: linear-gradient(135deg, #111116, #0a0a0f);
+      border-radius: 12px;
+      box-shadow: 0 0 30px rgba(226, 177, 60, 0.15), inset 0 0 30px rgba(0,0,0,0.8);
+      display: block;
+      margin: 0 auto;
+      border: 2px solid rgba(255,255,255,0.03);
+      position: relative;
+      z-index: 2;
+      height: 100%;
+      max-height: 100%;
+      min-height: 0;
+      min-width: 0;
+      width: auto;
+      object-fit: contain;
+      cursor: crosshair;
+    }
+    #gameOverlay {
+      position: absolute;
+      top: 30px; left: 30px; right: 30px; bottom: 30px;
+      background: rgba(10, 10, 15, 0.85);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      z-index: 10;
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: opacity 0.3s ease;
+    }
+    #gameOverlay.hidden {
+      display: none;
+      opacity: 0;
+      pointer-events: none;
+    }
+    #gameOverlay h2 {
+      font-size: 3.5rem;
+      margin-bottom: 20px;
+      color: var(--accent-color);
+      text-shadow: 0 0 25px rgba(226, 177, 60, 0.6);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      text-align: center;
+    }
+    #gameOverlay p {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+      line-height: 1.6;
+      max-width: 80%;
+      text-align: center;
+    }
+    .panel-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 30px;
+      height: 100%;
+      z-index: 2;
+    }
+    .panel-right {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      z-index: 2;
+    }
+    .game-board-container {
+      height: 100%;
+      min-height: 0;
+      padding: 10px 0;
+      box-sizing: border-box;
+      z-index: 2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .game-title {
+      color: var(--accent-color);
+      font-size: 2.2rem;
+      margin: 0;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-shadow: 0 0 15px rgba(226, 177, 60, 0.3);
+      text-align: center;
+    }
+    .game-score-display {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #fff;
+      background: rgba(255,255,255,0.05);
+      padding: 15px 30px;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
+      text-align: center;
+      line-height: 1.2;
+    }
+    .game-score-display span {
+      display: block;
+      font-size: 2.5rem;
+      color: var(--accent-color);
+      margin-top: 5px;
+    }
+    .game-info-panel {
+      width: 100%;
+      max-width: 860px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+      text-align: left;
+    }
+    .rules-card, .rewards-card {
+      background: var(--bg-card);
+      border-radius: 16px;
+      padding: 25px;
+      border: 1px solid rgba(0,0,0,0.05);
+      box-shadow: var(--shadow-md);
+    }
+    body.dark-mode .rules-card, body.dark-mode .rewards-card {
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    .sidebar-title {
+      font-size: 1.2rem;
+      color: var(--text-main);
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .sidebar-title i {
+      color: var(--accent-color);
+    }
+    .points-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .points-list li {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px dashed rgba(0,0,0,0.1);
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+    body.dark-mode .points-list li {
+      border-bottom-color: rgba(255,255,255,0.1);
+    }
+    .points-list li:last-child {
+      border-bottom: none;
+    }
+    .points-list li strong {
+      color: var(--text-main);
+    }
+    .btn-arcade {
+      background: linear-gradient(135deg, var(--accent-color), #d49c25);
+      color: #fff;
+      border: none;
+      box-shadow: 0 4px 15px rgba(226, 177, 60, 0.4);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border-radius: 30px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .btn-arcade:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(226, 177, 60, 0.6);
+    }
+    .mobile-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      justify-content: center;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+
+<header class="navbar">
+  <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">FurniCo</div>
+  <nav>
+    <a href="offers.html">Offers</a>
+    <a href="blog.html">Blog Spot</a>
+    <a href="video-marketing.html">Video Gallery</a>
+    <a href="affiliate-marketing.html">Affiliate Program</a>
+    <a href="help.html">Help</a>
+    <a href="checkout.html"><i class="fa-solid fa-cart-shopping"></i><span id="cartCount" class="cart-badge">0</span></a>
+    <button id="themeToggle" class="theme-toggle" aria-label="Toggle Dark Mode"><i class="fa-solid fa-moon"></i></button>
+  </nav>
+</header>
+
+<section class="section" style="min-height: 80vh;">
+  <div class="content" style="max-width: 1200px; margin: 0 auto;">
+    <div style="text-align: left; margin-bottom: 30px;">
+      <a href="offers.html" style="display: inline-flex; align-items: center; padding: 10px 20px; background-color: var(--bg-white); color: var(--text-main); border-radius: var(--radius); box-shadow: var(--shadow-sm); font-weight: 500; font-size: 0.95rem; border: 1px solid rgba(0,0,0,0.05); transition: transform 0.3s, box-shadow 0.3s;">
+        <i class="fa-solid fa-arrow-left" style="margin-right: 8px;"></i> Back to Offers
+      </a>
+    </div>
+
+    <div class="game-layout">
+      <!-- Game Console -->
+      <div class="game-console">
+        <div class="panel-left">
+          <h1 class="game-title">Bubble<br>Shooter</h1>
+          <div class="game-score-display">SCORE<br><span id="currentScore">0</span></div>
+        </div>
+        
+        <div class="game-board-container">
+           <canvas id="gameCanvas" width="300" height="600"></canvas>
+        </div>
+        
+        <div class="panel-right">
+          <div class="mobile-controls">
+             <p style="color: var(--text-muted); text-align: center; max-width: 150px; font-size: 0.9rem;">
+               Click or tap on the game area to aim and shoot bubbles.
+             </p>
+          </div>
+        </div>
+        
+        <div id="gameOverlay">
+          <h2 id="overlayTitle">Arcade Mode</h2>
+          <p id="overlayMessage">Pop bubbles to earn exclusive discount points!</p>
+          <div>
+            <button class="btn-arcade" id="startBtn" style="margin: 10px; padding: 15px 50px; font-size: 1.2rem;">Start Playing</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings / Rules Info Panel -->
+      <div class="game-info-panel">
+        <div class="rules-card">
+          <h3 class="sidebar-title"><i class="fa-solid fa-book-open"></i> How to Play</h3>
+          <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 0;">
+            Aim and shoot bubbles to match 3 or more of the same color. Pop them to clear the board and earn points. Don't let the bubbles reach the bottom!
+          </p>
+        </div>
+
+        <div class="rewards-card">
+          <h3 class="sidebar-title"><i class="fa-solid fa-gift"></i> Rewards Table</h3>
+          <ul class="points-list">
+            <li><span>500 - 1000 Pts</span> <strong>5% Off</strong></li>
+            <li><span>1010 - 2500 Pts</span> <strong>10% Off</strong></li>
+            <li><span>2510+ Pts</span> <strong>20% Off</strong></li>
+          </ul>
+        </div>
+        
+        <div class="rewards-card" style="text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+             <i class="fa-solid fa-trophy" style="font-size: 3rem; color: var(--accent-color); margin-bottom: 15px; opacity: 0.5;"></i>
+             <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0;">Reach the top tier to win the maximum 20% discount code!</p>
+        </div>
+
+        <div class="rules-card">
+          <h3 class="sidebar-title"><i class="fa-solid fa-lightbulb"></i> Pro Tips</h3>
+          <ul class="points-list" style="font-size: 0.9rem; line-height: 1.4;">
+            <li style="border: none; padding: 5px 0;"><i class="fa-solid fa-caret-right" style="color: var(--accent-color); margin-right: 8px;"></i> Bounce bubbles off the side walls to reach tricky spots!</li>
+            <li style="border: none; padding: 5px 0;"><i class="fa-solid fa-caret-right" style="color: var(--accent-color); margin-right: 8px;"></i> Dropping unconnected bubbles gives you bonus points!</li>
+          </ul>
+        </div>
+
+        <div class="rules-card">
+          <h3 class="sidebar-title"><i class="fa-solid fa-circle-exclamation"></i> Offer Details</h3>
+          <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 0;">
+            Earned discount codes are unique to your session and expire within <strong>24 hours</strong>. Discounts cannot be combined with other ongoing promotions. Feel free to play as many times as you like!
+          </p>
+        </div>
+        
+        <div class="rules-card">
+          <h3 class="sidebar-title"><i class="fa-solid fa-bolt"></i> Game Mechanics</h3>
+          <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 0;">
+            Points: Pop 1 Bubble = 10, Drop 1 Bubble = 20. If the bubbles reach the bottom line, it's <strong>Game Over</strong>!
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-brand">
+      <div class="footer-logo" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">FurniCo</div>
+      <p>Premium furniture designed for modern living. Quality craftsmanship delivered to your doorstep.</p>
+      <div class="social-links">
+        <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="#" aria-label="Twitter"><i class="fa-brands fa-twitter"></i></a>
+        <a href="#" aria-label="Pinterest"><i class="fa-brands fa-pinterest"></i></a>
+      </div>
+    </div>
+    <div class="footer-links">
+      <h3>Shop</h3>
+      <ul>
+        <li><a href="sofas.html">Sofas</a></li>
+        <li><a href="beds.html">Beds</a></li>
+        <li><a href="chairs.html">Chairs</a></li>
+        <li><a href="side-tables.html">Side Tables</a></li>
+        <li><a href="dining-tables.html">Dining Tables</a></li>
+      </ul>
+    </div>
+    <div class="footer-links">
+      <h3>Support</h3>
+      <ul>
+        <li><a href="shipping.html">Shipping Info</a></li>
+        <li><a href="returns.html">Returns & Refunds</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="privacy.html">Privacy Policy</a></li>
+        <li><a href="terms.html">Terms & Conditions</a></li>
+      </ul>
+    </div>
+    <div class="footer-newsletter">
+      <h3>Stay Updated</h3>
+      <p>Subscribe for exclusive offers and design inspiration.</p>
+      <form id="newsletterForm" class="newsletter-form">
+        <input type="email" placeholder="Your email address" required>
+        <button type="submit" aria-label="Subscribe"><i class="fa-solid fa-arrow-right"></i></button>
+      </form>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 FurniCo. All rights reserved.</p>
+    <div class="footer-bottom-links">
+      <a href="terms.html">Terms</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="index.html#contact">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+
+<script>
+  const canvas = document.getElementById("gameCanvas");
+  const ctx = canvas.getContext("2d");
+  const overlay = document.getElementById("gameOverlay");
+  const overlayTitle = document.getElementById("overlayTitle");
+  const overlayMessage = document.getElementById("overlayMessage");
+  const startBtn = document.getElementById("startBtn");
+  const scoreDisplay = document.getElementById("currentScore");
+
+  const BUBBLE_RADIUS = 15;
+  const DIAMETER = BUBBLE_RADIUS * 2;
+  const ROW_HEIGHT = 26; // Approx 30 * Math.sqrt(3)/2
+  const COLS = 10;
+  const ROWS = 20;
+
+  const COLORS = [ '#FF0D72', '#0DC2FF', '#0DFF72', '#F538FF', '#FF8E0D', '#FFE138' ];
+
+  let grid = [];
+  let score = 0;
+  let gameRunning = false;
+  let gameInterval;
+  
+  let playerBubble = null;
+  let nextBubbleColor = null;
+  
+  let mouse = { x: canvas.width / 2, y: 0 };
+  
+  let bubblesToAnimate = [];
+  
+  function initGrid() {
+    grid = [];
+    for (let r = 0; r < ROWS; r++) {
+      grid[r] = [];
+      let colsInRow = r % 2 === 0 ? COLS : COLS - 1;
+      for (let c = 0; c < colsInRow; c++) {
+        if (r < 6) {
+          grid[r][c] = { color: COLORS[Math.floor(Math.random() * COLORS.length)] };
+        } else {
+          grid[r][c] = null;
+        }
+      }
+    }
+  }
+
+  function getBubblePos(r, c) {
+    let x = c * DIAMETER + BUBBLE_RADIUS;
+    if (r % 2 !== 0) {
+      x += BUBBLE_RADIUS;
+    }
+    let y = r * ROW_HEIGHT + BUBBLE_RADIUS;
+    return { x, y };
+  }
+
+  function getGridPos(x, y) {
+    let r = Math.floor((y - BUBBLE_RADIUS) / ROW_HEIGHT);
+    if (r < 0) r = 0;
+    if (r >= ROWS) r = ROWS - 1;
+    
+    let offset = (r % 2 !== 0) ? BUBBLE_RADIUS : 0;
+    let c = Math.floor((x - offset) / DIAMETER);
+    
+    let colsInRow = r % 2 === 0 ? COLS : COLS - 1;
+    if (c < 0) c = 0;
+    if (c >= colsInRow) c = colsInRow - 1;
+    
+    return { r, c };
+  }
+
+  function drawBubble(x, y, color) {
+    ctx.beginPath();
+    ctx.arc(x, y, BUBBLE_RADIUS - 1, 0, Math.PI * 2);
+    ctx.fillStyle = color;
+    ctx.fill();
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "rgba(0,0,0,0.3)";
+    ctx.stroke();
+    
+    // Highlight
+    ctx.beginPath();
+    ctx.arc(x - 5, y - 5, BUBBLE_RADIUS / 3, 0, Math.PI * 2);
+    ctx.fillStyle = "rgba(255,255,255,0.4)";
+    ctx.fill();
+  }
+
+  function draw() {
+    ctx.fillStyle = "rgba(10, 10, 15, 1)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Draw bottom line
+    ctx.beginPath();
+    ctx.moveTo(0, canvas.height - 60);
+    ctx.lineTo(canvas.width, canvas.height - 60);
+    ctx.strokeStyle = "rgba(255, 0, 0, 0.5)";
+    ctx.setLineDash([5, 5]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Draw Grid Bubbles
+    for (let r = 0; r < ROWS; r++) {
+      let colsInRow = r % 2 === 0 ? COLS : COLS - 1;
+      for (let c = 0; c < colsInRow; c++) {
+        if (grid[r] && grid[r][c]) {
+          let pos = getBubblePos(r, c);
+          drawBubble(pos.x, pos.y, grid[r][c].color);
+        }
+      }
+    }
+
+    // Draw Player Bubble
+    if (playerBubble) {
+      drawBubble(playerBubble.x, playerBubble.y, playerBubble.color);
+    }
+
+    // Draw Next Bubble
+    if (nextBubbleColor && !playerBubble?.moving) {
+      drawBubble(30, canvas.height - 20, nextBubbleColor);
+    }
+
+    // Draw Aiming Line
+    if (gameRunning && playerBubble && !playerBubble.moving) {
+      ctx.beginPath();
+      ctx.moveTo(playerBubble.x, playerBubble.y);
+      
+      let dx = mouse.x - playerBubble.x;
+      let dy = mouse.y - playerBubble.y;
+      let angle = Math.atan2(dy, dx);
+      
+      // Limit angle to point upwards
+      if (angle > -0.1 && angle < Math.PI) angle = -0.1;
+      if (angle < -Math.PI + 0.1) angle = -Math.PI + 0.1;
+      
+      ctx.lineTo(playerBubble.x + Math.cos(angle) * 100, playerBubble.y + Math.sin(angle) * 100);
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.3)";
+      ctx.lineWidth = 2;
+      ctx.setLineDash([5, 5]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+    
+    // Draw animated falling bubbles
+    for (let i = 0; i < bubblesToAnimate.length; i++) {
+        let b = bubblesToAnimate[i];
+        drawBubble(b.x, b.y, b.color);
+    }
+  }
+  
+  function getNeighbors(r, c) {
+      const neighbors = [];
+      const offsetsEven = [ [-1, -1], [-1, 0], [0, -1], [0, 1], [1, -1], [1, 0] ];
+      const offsetsOdd = [ [-1, 0], [-1, 1], [0, -1], [0, 1], [1, 0], [1, 1] ];
+      
+      const offsets = r % 2 === 0 ? offsetsEven : offsetsOdd;
+      
+      for (let i = 0; i < offsets.length; i++) {
+          let nr = r + offsets[i][0];
+          let nc = c + offsets[i][1];
+          if (nr >= 0 && nr < ROWS && nc >= 0) {
+              let colsInRow = nr % 2 === 0 ? COLS : COLS - 1;
+              if (nc < colsInRow) {
+                  neighbors.push({r: nr, c: nc});
+              }
+          }
+      }
+      return neighbors;
+  }
+  
+  function findCluster(r, c, matchColor, cluster) {
+      let key = r + "," + c;
+      if (cluster.has(key)) return;
+      
+      if (!grid[r] || !grid[r][c]) return;
+      
+      if (matchColor && grid[r][c].color !== matchColor) return;
+      
+      cluster.add(key);
+      
+      let neighbors = getNeighbors(r, c);
+      for (let i = 0; i < neighbors.length; i++) {
+          findCluster(neighbors[i].r, neighbors[i].c, matchColor, cluster);
+      }
+  }
+
+  function removeFloatingBubbles() {
+      let connected = new Set();
+      // Find all bubbles connected to the top row
+      for (let c = 0; c < COLS; c++) {
+          if (grid[0][c]) {
+              findCluster(0, c, null, connected);
+          }
+      }
+      
+      let dropped = 0;
+      for (let r = 0; r < ROWS; r++) {
+          let colsInRow = r % 2 === 0 ? COLS : COLS - 1;
+          for (let c = 0; c < colsInRow; c++) {
+              if (grid[r][c] && !connected.has(r + "," + c)) {
+                  let pos = getBubblePos(r, c);
+                  bubblesToAnimate.push({
+                      x: pos.x, y: pos.y,
+                      color: grid[r][c].color,
+                      vx: (Math.random() - 0.5) * 5,
+                      vy: -5 + Math.random() * -5
+                  });
+                  grid[r][c] = null;
+                  dropped++;
+              }
+          }
+      }
+      return dropped;
+  }
+
+  function snapBubble() {
+      let nearestDist = Infinity;
+      let nearestGrid = null;
+      
+      for (let r = 0; r < ROWS; r++) {
+          let colsInRow = r % 2 === 0 ? COLS : COLS - 1;
+          for (let c = 0; c < colsInRow; c++) {
+              if (!grid[r][c]) {
+                  let pos = getBubblePos(r, c);
+                  let dx = pos.x - playerBubble.x;
+                  let dy = pos.y - playerBubble.y;
+                  let dist = Math.sqrt(dx*dx + dy*dy);
+                  if (dist < nearestDist) {
+                      nearestDist = dist;
+                      nearestGrid = {r, c};
+                  }
+              }
+          }
+      }
+      
+      if (nearestGrid) {
+          grid[nearestGrid.r][nearestGrid.c] = { color: playerBubble.color };
+          
+          let cluster = new Set();
+          findCluster(nearestGrid.r, nearestGrid.c, playerBubble.color, cluster);
+          
+          if (cluster.size >= 3) {
+              cluster.forEach(key => {
+                  let parts = key.split(",");
+                  let r = parseInt(parts[0]);
+                  let c = parseInt(parts[1]);
+                  let pos = getBubblePos(r, c);
+                  bubblesToAnimate.push({
+                      x: pos.x, y: pos.y,
+                      color: grid[r][c].color,
+                      vx: (Math.random() - 0.5) * 10,
+                      vy: -5 + Math.random() * -10
+                  });
+                  grid[r][c] = null;
+              });
+              score += cluster.size * 10;
+              
+              let dropped = removeFloatingBubbles();
+              score += dropped * 20;
+              
+              scoreDisplay.textContent = score;
+          }
+          
+          // Check Game Over
+          if (nearestGrid.r >= ROWS - 2) {
+              endGame(score);
+              return;
+          }
+      }
+      
+      resetPlayerBubble();
+  }
+
+  function update(time = 0) {
+    if (!gameRunning) return;
+
+    if (playerBubble && playerBubble.moving) {
+      playerBubble.x += playerBubble.vx;
+      playerBubble.y += playerBubble.vy;
+
+      // Wall bounce
+      if (playerBubble.x - BUBBLE_RADIUS < 0) {
+        playerBubble.x = BUBBLE_RADIUS;
+        playerBubble.vx *= -1;
+      } else if (playerBubble.x + BUBBLE_RADIUS > canvas.width) {
+        playerBubble.x = canvas.width - BUBBLE_RADIUS;
+        playerBubble.vx *= -1;
+      }
+
+      // Top bounce / snap
+      if (playerBubble.y - BUBBLE_RADIUS < 0) {
+        snapBubble();
+      } else {
+        // Check collision with other bubbles
+        let collided = false;
+        outer: for (let r = 0; r < ROWS; r++) {
+          let colsInRow = r % 2 === 0 ? COLS : COLS - 1;
+          for (let c = 0; c < colsInRow; c++) {
+            if (grid[r] && grid[r][c]) {
+              let pos = getBubblePos(r, c);
+              let dx = pos.x - playerBubble.x;
+              let dy = pos.y - playerBubble.y;
+              let dist = Math.sqrt(dx*dx + dy*dy);
+              if (dist <= BUBBLE_RADIUS * 2 - 2) {
+                collided = true;
+                break outer;
+              }
+            }
+          }
+        }
+        
+        if (collided) {
+            snapBubble();
+        }
+      }
+    }
+    
+    // Animate falling bubbles
+    for (let i = bubblesToAnimate.length - 1; i >= 0; i--) {
+        let b = bubblesToAnimate[i];
+        b.x += b.vx;
+        b.y += b.vy;
+        b.vy += 0.5; // gravity
+        
+        if (b.y > canvas.height + BUBBLE_RADIUS) {
+            bubblesToAnimate.splice(i, 1);
+        }
+    }
+
+    draw();
+    gameInterval = requestAnimationFrame(update);
+  }
+  
+  function resetPlayerBubble() {
+      playerBubble = {
+          x: canvas.width / 2,
+          y: canvas.height - 30,
+          color: nextBubbleColor || COLORS[Math.floor(Math.random() * COLORS.length)],
+          vx: 0,
+          vy: 0,
+          moving: false
+      };
+      nextBubbleColor = COLORS[Math.floor(Math.random() * COLORS.length)];
+  }
+
+  function shootBubble(targetX, targetY) {
+      if (!gameRunning || !playerBubble || playerBubble.moving) return;
+      
+      let dx = targetX - playerBubble.x;
+      let dy = targetY - playerBubble.y;
+      let angle = Math.atan2(dy, dx);
+      
+      if (angle > -0.1 && angle < Math.PI) angle = -0.1;
+      if (angle < -Math.PI + 0.1) angle = -Math.PI + 0.1;
+      
+      let speed = 12;
+      playerBubble.vx = Math.cos(angle) * speed;
+      playerBubble.vy = Math.sin(angle) * speed;
+      playerBubble.moving = true;
+  }
+
+  // Mouse & Touch events
+  canvas.addEventListener('mousemove', (e) => {
+      let rect = canvas.getBoundingClientRect();
+      mouse.x = (e.clientX - rect.left) * (canvas.width / rect.width);
+      mouse.y = (e.clientY - rect.top) * (canvas.height / rect.height);
+  });
+  
+  canvas.addEventListener('mousedown', (e) => {
+      if(!gameRunning) return;
+      let rect = canvas.getBoundingClientRect();
+      let x = (e.clientX - rect.left) * (canvas.width / rect.width);
+      let y = (e.clientY - rect.top) * (canvas.height / rect.height);
+      shootBubble(x, y);
+  });
+  
+  canvas.addEventListener('touchstart', (e) => {
+      if(!gameRunning) return;
+      e.preventDefault();
+      let rect = canvas.getBoundingClientRect();
+      let touch = e.touches[0];
+      let x = (touch.clientX - rect.left) * (canvas.width / rect.width);
+      let y = (touch.clientY - rect.top) * (canvas.height / rect.height);
+      mouse.x = x; mouse.y = y;
+      shootBubble(x, y);
+  }, {passive: false});
+
+  function applyDiscount(finalScore) {
+    let rate = 0;
+    let percentage = 0;
+    let code = "";
+
+    if(finalScore >= 500 && finalScore <= 1000) { rate = 0.05; percentage = 5; code = 'BUBBLE5'; }
+    else if(finalScore > 1000 && finalScore <= 2500) { rate = 0.10; percentage = 10; code = 'BUBBLE10'; }
+    else if(finalScore > 2500) { rate = 0.20; percentage = 20; code = 'BUBBLE20'; }
+
+    if (rate > 0) {
+      overlayMessage.innerHTML = `Amazing! You scored ${finalScore} points.<br><br><strong>You won a ${percentage}% discount code!</strong><br><br>Use code: <strong id="gameDiscountCode" title="Click to copy" style="cursor: pointer; background: var(--accent-color); color: white; padding: 10px 20px; border-radius: 5px;">${code}</strong> at checkout.`;
+      
+      setTimeout(() => {
+        const codeElement = document.getElementById('gameDiscountCode');
+        if(codeElement) {
+          codeElement.addEventListener('click', () => {
+             navigator.clipboard.writeText(code);
+             codeElement.innerText = "COPIED!";
+             setTimeout(() => { codeElement.innerText = code; }, 2000);
+          });
+        }
+      }, 50);
+    } else {
+      overlayMessage.innerHTML = `Game Over! You scored ${finalScore} points.<br>Not enough for a discount this time. Try again!`;
+    }
+  }
+
+  function endGame(finalScore) {
+    gameRunning = false;
+    cancelAnimationFrame(gameInterval);
+    
+    overlay.classList.remove("hidden");
+    overlayTitle.textContent = "Game Over";
+    overlayTitle.style.color = "#e74c3c";
+    
+    startBtn.textContent = "Play Again";
+    applyDiscount(finalScore);
+  }
+
+  function startGame() {
+    overlay.classList.add("hidden");
+    initGrid();
+    score = 0;
+    scoreDisplay.textContent = score;
+    bubblesToAnimate = [];
+    resetPlayerBubble();
+    
+    localStorage.removeItem('furnicoDiscountRate');
+    
+    gameRunning = true;
+    update();
+  }
+
+  startBtn.addEventListener("click", startGame);
+
+  // Initial draw
+  initGrid();
+  draw();
+
+</script>
+</body>
+</html>
+

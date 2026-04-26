@@ -27,7 +27,7 @@
       <a href="index.html" style="display: inline-flex; align-items: center; padding: 10px 20px; background-color: var(--bg-white); color: var(--text-main); border-radius: var(--radius); box-shadow: var(--shadow-sm); font-weight: 500; font-size: 0.95rem; border: 1px solid rgba(0,0,0,0.05); transition: transform 0.3s, box-shadow 0.3s;"><i class="fa-solid fa-arrow-left" style="margin-right: 8px;"></i> Back to Store</a>
     </div>
   <div class="content" style="max-width: 1000px; margin: 50px auto; text-align: center;">
-    <h1 style="color: var(--accent-color); font-size: 2.5rem; margin-bottom: 10px;">Play game and earn discount offer points</h1>
+    <h1 style="color: var(--accent-color); font-size: 2.5rem; margin-bottom: 10px;">Level Up Your Savings: Play & Earn Discounts</h1>
     <p style="font-size: 1.2rem; color: var(--text-muted); margin-bottom: 40px;">Choose a game below, complete the challenge, and unlock exclusive discounts!</p>
     
     <div class="cards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 30px;">
@@ -39,6 +39,22 @@
         <p style="margin-bottom: 20px; color: var(--text-muted);">Clear the bricks to score points. Win up to a 20% discount!</p>
         <button class="btn" style="width: 100%;" onclick="window.location.href='brick-breaker.html'">Play Now</button>
       </div>
+
+      <!-- Game 2 -->
+      <div class="card" style="padding: 30px; text-align: center; border-radius: var(--radius); background: var(--bg-card); box-shadow: var(--shadow-sm); cursor: pointer; transition: transform 0.3s, box-shadow 0.3s;">
+        <i class="fa-solid fa-puzzle-piece" style="font-size: 4rem; color: var(--accent-color); margin-bottom: 20px; display: block;"></i>
+        <h3 style="margin-bottom: 15px;">Tetris</h3>
+        <p style="margin-bottom: 20px; color: var(--text-muted);">Clear lines to score points. Win up to a 20% discount!</p><br>
+        <button class="btn" style="width: 100%;" onclick="window.location.href='tetris.html'">Play Now</button>
+      </div>
+
+      <!-- Game 3 -->
+      <div class="card" style="padding: 30px; text-align: center; border-radius: var(--radius); background: var(--bg-card); box-shadow: var(--shadow-sm); cursor: pointer; transition: transform 0.3s, box-shadow 0.3s;">
+        <i class="fa-solid fa-circle-dot" style="font-size: 4rem; color: var(--accent-color); margin-bottom: 20px; display: block;"></i>
+        <h3 style="margin-bottom: 15px;">Bubble Shooter</h3>
+        <p style="margin-bottom: 20px; color: var(--text-muted);">Pop bubbles to score points. Win up to a 20% discount!</p><br>
+        <button class="btn" style="width: 100%;" onclick="window.location.href='bubble-shooter.html'">Play Now</button>
+      </div>
     </div>
   </div>
 </section>
@@ -46,7 +62,7 @@
 <footer class="footer">
   <div class="footer-content">
     <div class="footer-brand">
-      <div class="footer-logo" onclick="window.location.href='index.html'" style="cursor: pointer;">FurniCo</div>
+      <div class="footer-logo" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">FurniCo</div>
       <p>Premium furniture designed for modern living. Quality craftsmanship delivered to your doorstep.</p>
       <div class="social-links">
         <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
@@ -98,3 +114,4 @@
 
 </body>
 </html>
+
