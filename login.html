@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en" style="scroll-behavior: smooth;">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login / Sign Up | FurniCo</title>
+  <meta name="description" content="Login or sign up to FurniCo for a premium shopping experience.">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    body.login-page {
+      background: var(--bg-light);
+    }
+    
+    .auth-split {
+      display: flex;
+      min-height: calc(100vh - 80px);
+    }
+    
+    .auth-image-side {
+      flex: 1;
+      display: none;
+      background-image: url('https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1600&q=80');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+    
+    @media (min-width: 900px) {
+      .auth-image-side {
+        display: block;
+      }
+    }
+    
+    .auth-image-overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.7));
+      display: flex;
+      align-items: flex-end;
+      padding: 60px;
+      color: #fff;
+    }
+    
+    .auth-image-content {
+      animation: slideUpFade 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+    }
+    
+    .auth-image-content h2 {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+      font-family: var(--font-heading, serif);
+      line-height: 1.1;
+      color: lightblue;
+      text-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+    
+    .auth-image-content p {
+      font-size: 1.15rem;
+      opacity: 0.95;
+      max-width: 450px;
+      line-height: 1.6;
+      text-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    }
+    
+    .auth-form-side {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 20px;
+      background-color: var(--bg-light);
+      position: relative;
+    }
+    
+    .dark-mode .auth-form-side {
+      background-color: #121212;
+    }
+    
+    .auth-container {
+      width: 100%;
+      max-width: 440px;
+      animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    @keyframes slideUpFade {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .auth-logo {
+      text-align: center;
+      font-size: 2.8rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      font-family: var(--font-heading, serif);
+      color: var(--primary-color);
+    }
+    
+    .auth-subtitle {
+      text-align: center;
+      color: var(--text-muted);
+      margin-bottom: 40px;
+      font-size: 1.05rem;
+    }
+    
+    .dark-mode .auth-logo {
+      color: #fff;
+    }
+    
+    .auth-tabs {
+      display: flex;
+      margin-bottom: 35px;
+      background: rgba(0,0,0,0.04);
+      border-radius: 12px;
+      padding: 6px;
+    }
+    
+    .dark-mode .auth-tabs {
+      background: rgba(255,255,255,0.05);
+    }
+    
+    .auth-tab {
+      flex: 1;
+      text-align: center;
+      padding: 14px 0;
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--text-muted);
+      border-radius: 8px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      font-size: 1.05rem;
+    }
+    
+    .auth-tab.active {
+      background: var(--bg-white);
+      color: var(--primary-color);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }
+    
+    .dark-mode .auth-tab.active {
+      background: #2a2a2a;
+      color: #fff;
+    }
+    
+    .auth-form {
+      display: none;
+      flex-direction: column;
+      gap: 22px;
+    }
+    
+    .auth-form.active {
+      display: flex;
+    }
+    
+    .input-group {
+      position: relative;
+    }
+    
+    .auth-form input {
+      width: 100%;
+      padding: 18px 18px 18px 55px;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 12px;
+      font-size: 1rem;
+      background: var(--bg-white);
+      color: var(--text-main);
+      transition: all 0.3s ease;
+    }
+    
+    .dark-mode .auth-form input {
+      background: #1e1e1e;
+      border-color: rgba(255,255,255,0.1);
+      color: #fff;
+    }
+    
+    .auth-form input:focus {
+      outline: none;
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 4px rgba(192, 160, 128, 0.15);
+    }
+    
+    .input-group i {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #aaa;
+      font-size: 1.1rem;
+      transition: color 0.3s ease;
+    }
+    
+    .auth-form input:focus + i, 
+    .auth-form input:focus ~ i {
+      color: var(--accent-color);
+    }
+    
+    .auth-btn {
+      background: var(--primary-color);
+      color: #fff;
+      padding: 18px;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 10px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .dark-mode .auth-btn {
+      background: #fff;
+      color: #000;
+      box-shadow: 0 8px 20px rgba(255,255,255,0.1);
+    }
+    
+    .auth-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+      background: #1a252f;
+    }
+    
+    .dark-mode .auth-btn:hover {
+      background: #e0e0e0;
+    }
+    
+    .auth-btn::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: all 0.6s ease;
+    }
+    
+    .auth-btn:hover::after {
+      left: 100%;
+    }
+    
+    .auth-links {
+      text-align: center;
+      margin-top: 5px;
+    }
+    
+    .auth-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+    
+    .auth-links a:hover {
+      color: var(--accent-color);
+    }
+    
+    .social-login {
+      margin-top: 35px;
+      text-align: center;
+    }
+    
+    .social-login p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      position: relative;
+      margin-bottom: 25px;
+      font-weight: 500;
+    }
+    
+    .social-login p::before,
+    .social-login p::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 25%;
+      height: 1px;
+      background: rgba(0,0,0,0.1);
+    }
+    .dark-mode .social-login p::before,
+    .dark-mode .social-login p::after {
+      background: rgba(255,255,255,0.1);
+    }
+    
+    .social-login p::before { left: 0; }
+    .social-login p::after { right: 0; }
+    
+    .social-btns {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+    }
+    
+    .social-btn {
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      border: 1px solid rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-main);
+      font-size: 1.3rem;
+      cursor: pointer;
+      background: var(--bg-white);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    
+    .dark-mode .social-btn {
+      border-color: rgba(255,255,255,0.1);
+      background: #1e1e1e;
+      color: #fff;
+    }
+    
+    .social-btn:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+      border-color: transparent;
+    }
+    .dark-mode .social-btn:hover {
+      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    }
+    .social-btn.google:hover { color: #DB4437; border-color: #DB4437; }
+    .social-btn.apple:hover { color: #000; border-color: #000; }
+    .dark-mode .social-btn.apple:hover { color: #fff; border-color: #fff; }
+    .social-btn.facebook:hover { color: #4267B2; border-color: #4267B2; }
+  </style>
+</head>
+<body class="login-page">
+
+<header class="navbar">
+  <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">FurniCo</div>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="offers.html">Offers</a>
+    <a href="blog.html">Blog Spot</a>
+    <a href="help.html">Help</a>
+    <a href="checkout.html"><i class="fa-solid fa-cart-shopping"></i><span id="cartCount" class="cart-badge">0</span></a>
+    <button id="themeToggle" class="theme-toggle" aria-label="Toggle Dark Mode"><i class="fa-solid fa-moon"></i></button>
+  </nav>
+</header>
+
+<section class="auth-split fade-in-section is-visible">
+  <div class="auth-image-side">
+    <div class="auth-image-overlay">
+      <div class="auth-image-content">
+        <h2>Elevate Your Space.</h2>
+        <p>Join FurniCo today and discover a world of premium, sustainable furniture designed to transform modern living.</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="auth-form-side">
+    <div class="auth-container">
+      <div class="auth-logo">FurniCo</div>
+      <p class="auth-subtitle">Welcome back! Please enter your details.</p>
+      
+      <div class="auth-tabs">
+        <div class="auth-tab active" onclick="switchTab('login')">Login</div>
+        <div class="auth-tab" onclick="switchTab('signup')">Sign Up</div>
+      </div>
+      
+      <!-- Login Form -->
+      <form id="loginForm" class="auth-form active" onsubmit="handleAuth(event, 'login')">
+        <div class="input-group">
+          <input type="email" id="loginEmail" placeholder="Email Address" required>
+          <i class="fa-solid fa-envelope"></i>
+        </div>
+        <div class="input-group">
+          <input type="password" id="loginPassword" placeholder="Password" required>
+          <i class="fa-solid fa-lock"></i>
+        </div>
+        <div class="auth-links" style="text-align: right; margin-top: -10px;">
+          <a href="#">Forgot password?</a>
+        </div>
+        <button type="submit" class="auth-btn">Sign In</button>
+      </form>
+      
+      <!-- Sign Up Form -->
+      <form id="signupForm" class="auth-form" onsubmit="handleAuth(event, 'signup')">
+        <div class="input-group">
+          <input type="text" id="signupName" placeholder="Full Name" required>
+          <i class="fa-solid fa-user"></i>
+        </div>
+        <div class="input-group">
+          <input type="email" id="signupEmail" placeholder="Email Address" required>
+          <i class="fa-solid fa-envelope"></i>
+        </div>
+        <div class="input-group">
+          <input type="password" id="signupPassword" placeholder="Password" required>
+          <i class="fa-solid fa-lock"></i>
+        </div>
+        <button type="submit" class="auth-btn">Create Account</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-brand">
+      <div class="footer-logo" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">FurniCo</div>
+      <p>Premium furniture designed for modern living. Quality craftsmanship delivered to your doorstep.</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 FurniCo. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+  async function switchTab(tab) {
+    if (window.isSwitching) return;
+    window.isSwitching = true;
+    
+    const loginTab = document.querySelectorAll('.auth-tab')[0];
+    const signupTab = document.querySelectorAll('.auth-tab')[1];
+    const loginForm = document.getElementById('loginForm');
+    const signupForm = document.getElementById('signupForm');
+    
+    const isLogin = tab === 'login';
+    if ((isLogin && loginForm.classList.contains('active')) || 
+        (!isLogin && signupForm.classList.contains('active'))) {
+      window.isSwitching = false;
+      return; 
+    }
+    
+    const currentForm = isLogin ? signupForm : loginForm;
+    const nextForm = isLogin ? loginForm : signupForm;
+    
+    // Update tab classes
+    loginTab.classList.toggle('active', isLogin);
+    signupTab.classList.toggle('active', !isLogin);
+    
+    // Smoothly update subtitle
+    const subtitle = document.querySelector('.auth-subtitle');
+    if(subtitle) {
+        subtitle.style.opacity = '0';
+        setTimeout(() => {
+            subtitle.innerText = isLogin ? 'Welcome back! Please enter your details.' : 'Create an account to login.';
+            subtitle.style.opacity = '1';
+        }, 200);
+    }
+
+    // Animate out current form
+    const outAnim = currentForm.animate([
+      { opacity: 1, transform: 'translateX(0)' },
+      { opacity: 0, transform: isLogin ? 'translateX(30px)' : 'translateX(-30px)' }
+    ], { duration: 250, easing: 'ease-in', fill: 'forwards' });
+    
+    await outAnim.finished;
+    
+    currentForm.classList.remove('active');
+    nextForm.classList.add('active');
+    
+    // Animate in next form
+    nextForm.animate([
+      { opacity: 0, transform: isLogin ? 'translateX(-30px)' : 'translateX(30px)' },
+      { opacity: 1, transform: 'translateX(0)' }
+    ], { duration: 400, easing: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)', fill: 'forwards' });
+    
+    window.isSwitching = false;
+  }
+
+  function handleAuth(event, type) {
+    event.preventDefault();
+    let user = null;
+    if(type === 'login') {
+      const email = document.getElementById('loginEmail').value;
+      user = email.split('@')[0];
+    } else {
+      user = document.getElementById('signupName').value;
+    }
+    
+    if(user) {
+      localStorage.setItem('furnico_user', user);
+      
+      // Show animated welcome popup
+      const overlay = document.createElement('div');
+      overlay.style.position = 'fixed';
+      overlay.style.top = '0';
+      overlay.style.left = '0';
+      overlay.style.width = '100vw';
+      overlay.style.height = '100vh';
+      overlay.style.backgroundColor = 'rgba(0,0,0,0.6)';
+      overlay.style.display = 'flex';
+      overlay.style.alignItems = 'center';
+      overlay.style.justifyContent = 'center';
+      overlay.style.zIndex = '9999';
+      overlay.style.opacity = '0';
+      overlay.style.transition = 'opacity 0.3s ease';
+
+      const modal = document.createElement('div');
+      modal.style.backgroundColor = 'var(--bg-white, #ffffff)';
+      modal.style.padding = '40px 50px';
+      modal.style.borderRadius = '16px';
+      modal.style.boxShadow = '0 15px 40px rgba(0,0,0,0.3)';
+      modal.style.textAlign = 'center';
+      modal.style.transform = 'translateY(-20px) scale(0.95)';
+      modal.style.transition = 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+      modal.style.minWidth = '280px';
+      modal.style.minHeight = '200px';
+      modal.style.display = 'flex';
+      modal.style.flexDirection = 'column';
+      modal.style.alignItems = 'center';
+      modal.style.justifyContent = 'center';
+      
+      // Loader elements
+      const loaderContainer = document.createElement('div');
+      loaderContainer.style.display = 'flex';
+      loaderContainer.style.flexDirection = 'column';
+      loaderContainer.style.alignItems = 'center';
+      
+      const spinner = document.createElement('div');
+      spinner.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+      spinner.style.fontSize = '40px';
+      spinner.style.color = 'var(--primary-color, #000)';
+      spinner.style.marginBottom = '15px';
+      
+      const loadingText = document.createElement('h3');
+      loadingText.innerText = 'Authenticating...';
+      loadingText.style.margin = '0';
+      loadingText.style.color = 'var(--text-muted, #666)';
+      loadingText.style.fontSize = '1.2rem';
+      
+      loaderContainer.appendChild(spinner);
+      loaderContainer.appendChild(loadingText);
+      
+      // Success elements
+      const successContainer = document.createElement('div');
+      successContainer.style.display = 'none';
+      successContainer.style.flexDirection = 'column';
+      successContainer.style.alignItems = 'center';
+      
+      const icon = document.createElement('div');
+      icon.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+      icon.style.fontSize = '50px';
+      icon.style.color = '#27ae60';
+      icon.style.marginBottom = '20px';
+      icon.style.opacity = '0';
+      
+      const text = document.createElement('h3');
+      text.innerText = 'Welcome, ' + user + '!';
+      text.style.margin = '0 0 10px 0';
+      text.style.color = 'var(--text-main, #333)';
+      text.style.fontSize = '1.5rem';
+      text.style.opacity = '0';
+
+      successContainer.appendChild(icon);
+      successContainer.appendChild(text);
+      
+      modal.appendChild(loaderContainer);
+      modal.appendChild(successContainer);
+      overlay.appendChild(modal);
+      document.body.appendChild(overlay);
+      
+      // Trigger reflow
+      void overlay.offsetWidth;
+      overlay.style.opacity = '1';
+      modal.style.transform = 'translateY(0) scale(1)';
+
+      // Switch to success after 1 second
+      setTimeout(() => {
+        loaderContainer.style.display = 'none';
+        successContainer.style.display = 'flex';
+        
+        icon.animate([
+          { transform: 'scale(0) rotate(-45deg)', opacity: 0 },
+          { transform: 'scale(1.2) rotate(10deg)', opacity: 1, offset: 0.7 },
+          { transform: 'scale(1) rotate(0deg)', opacity: 1 }
+        ], {
+          duration: 600,
+          easing: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+          fill: 'forwards'
+        });
+
+        text.animate([
+          { transform: 'translateY(20px)', opacity: 0 },
+          { transform: 'translateY(-5px)', opacity: 1, offset: 0.7 },
+          { transform: 'translateY(0)', opacity: 1 }
+        ], {
+          duration: 500,
+          delay: 150,
+          easing: 'ease-out',
+          fill: 'forwards'
+        });
+        
+        // Auto redirect after showing the success message
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 1800);
+        
+      }, 1000);
+    }
+  }
+</script>
+<script src="script.js"></script>
+</body>
+</html>

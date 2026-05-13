@@ -20,7 +20,7 @@ if (themeToggle) {
   themeToggle.addEventListener('click', () => {
     body.classList.toggle('dark-mode');
     const isDark = body.classList.contains('dark-mode');
-    
+
     // Update Icon
     if (icon) {
       if (isDark) {
@@ -69,10 +69,10 @@ if (navbar) {
     mobileMenuBtn.className = 'mobile-menu-btn';
     mobileMenuBtn.innerHTML = '<i class="fa-solid fa-bars"></i>';
     mobileMenuBtn.setAttribute('aria-label', 'Toggle navigation');
-    
+
     // Insert before nav
     navbar.insertBefore(mobileMenuBtn, nav);
-    
+
     mobileMenuBtn.addEventListener('click', () => {
       nav.classList.toggle('open');
       const icon = mobileMenuBtn.querySelector('i');
@@ -118,7 +118,7 @@ if (saleBanner && closeBanner) {
   closeBanner.addEventListener('click', () => {
     saleBanner.classList.remove('show');
   });
-  
+
   window.addEventListener('click', (e) => {
     if (e.target === saleBanner) {
       saleBanner.classList.remove('show');
@@ -130,7 +130,7 @@ function startSaleTimer() {
   const hoursEl = document.getElementById('hours');
   const minutesEl = document.getElementById('minutes');
   const secondsEl = document.getElementById('seconds');
-  
+
   if (!hoursEl || !minutesEl || !secondsEl) return;
 
   // Set deadline to 24 hours from now if not set (persists in localStorage)
@@ -161,7 +161,7 @@ if (discountCode) {
   discountCode.addEventListener('click', () => {
     const codeText = discountCode.innerText;
     navigator.clipboard.writeText(codeText);
-    
+
     // Visual feedback
     discountCode.innerText = "COPIED!";
     setTimeout(() => {
@@ -204,7 +204,320 @@ function showToast(message) {
   }, 3000);
 }
 
+function showLoginPromptPopup() {
+  const overlay = document.createElement('div');
+  overlay.style.position = 'fixed';
+  overlay.style.top = '0';
+  overlay.style.left = '0';
+  overlay.style.width = '100vw';
+  overlay.style.height = '100vh';
+  overlay.style.backgroundColor = 'rgba(0,0,0,0.6)';
+  overlay.style.display = 'flex';
+  overlay.style.alignItems = 'center';
+  overlay.style.justifyContent = 'center';
+  overlay.style.zIndex = '9999';
+  overlay.style.opacity = '0';
+  overlay.style.transition = 'opacity 0.3s ease';
+
+  const modal = document.createElement('div');
+  modal.style.backgroundColor = 'var(--bg-white, #ffffff)';
+  modal.style.padding = '40px 50px';
+  modal.style.borderRadius = '16px';
+  modal.style.boxShadow = '0 15px 40px rgba(0,0,0,0.3)';
+  modal.style.textAlign = 'center';
+  modal.style.transform = 'translateY(-20px) scale(0.95)';
+  modal.style.transition = 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+  modal.style.minWidth = '320px';
+
+  const icon = document.createElement('div');
+  icon.innerHTML = '<i class="fa-solid fa-lock"></i>';
+  icon.style.fontSize = '50px';
+  icon.style.color = 'var(--primary-color, #000)';
+  icon.style.marginBottom = '20px';
+
+  const text = document.createElement('h3');
+  text.innerText = 'Login required to add items in the cart';
+  text.style.margin = '0 0 15px 0';
+  text.style.color = 'var(--text-main, #333)';
+  text.style.fontSize = '1.25rem';
+
+  const subText = document.createElement('p');
+  subText.innerText = 'Please log in to continue.';
+  subText.style.margin = '0 0 25px 0';
+  subText.style.color = 'var(--text-muted, #666)';
+  subText.style.fontSize = '1rem';
+
+  const btnGroup = document.createElement('div');
+  btnGroup.style.display = 'flex';
+  btnGroup.style.gap = '15px';
+  btnGroup.style.justifyContent = 'center';
+
+  const loginBtn = document.createElement('button');
+  loginBtn.innerText = 'Login';
+  loginBtn.style.padding = '12px 25px';
+  loginBtn.style.backgroundColor = 'var(--primary-color, #000)';
+  loginBtn.style.color = '#fff';
+  loginBtn.style.border = 'none';
+  loginBtn.style.borderRadius = '8px';
+  loginBtn.style.cursor = 'pointer';
+  loginBtn.style.fontWeight = '600';
+  loginBtn.style.transition = 'transform 0.2s';
+  loginBtn.onmouseover = () => loginBtn.style.transform = 'translateY(-2px)';
+  loginBtn.onmouseout = () => loginBtn.style.transform = 'none';
+  loginBtn.onclick = () => {
+    window.location.href = 'login.html';
+  };
+
+  const closeBtn = document.createElement('button');
+  closeBtn.innerText = 'Cancel';
+  closeBtn.style.padding = '12px 25px';
+  closeBtn.style.backgroundColor = 'transparent';
+  closeBtn.style.color = 'var(--text-main, #333)';
+  closeBtn.style.border = '1px solid #ccc';
+  closeBtn.style.borderRadius = '8px';
+  closeBtn.style.cursor = 'pointer';
+  closeBtn.style.fontWeight = '600';
+  closeBtn.style.transition = 'background-color 0.2s';
+  closeBtn.onmouseover = () => closeBtn.style.backgroundColor = 'rgba(0,0,0,0.05)';
+  closeBtn.onmouseout = () => closeBtn.style.backgroundColor = 'transparent';
+  closeBtn.onclick = () => {
+    overlay.style.opacity = '0';
+    modal.style.transform = 'translateY(-20px) scale(0.95)';
+    setTimeout(() => {
+      if (document.body.contains(overlay)) document.body.removeChild(overlay);
+    }, 300);
+  };
+
+  btnGroup.appendChild(closeBtn);
+  btnGroup.appendChild(loginBtn);
+
+  modal.appendChild(icon);
+  modal.appendChild(text);
+  modal.appendChild(subText);
+  modal.appendChild(btnGroup);
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+
+  // Trigger reflow
+  void overlay.offsetWidth;
+  overlay.style.opacity = '1';
+  modal.style.transform = 'translateY(0) scale(1)';
+}
+
+function formatINR(amount) {
+  return '₹' + Number(amount).toLocaleString('en-IN', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+}
+
+function showAddToCartPopup(name, price, imageSrc) {
+  // Find current item in cart to get quantity
+  const cartData = JSON.parse(localStorage.getItem('furnicoCart')) || [];
+  let currentItem = cartData.find(item => item.name === name);
+  let currentQty = currentItem ? currentItem.quantity : 1;
+
+  const overlay = document.createElement('div');
+  overlay.style.position = 'fixed';
+  overlay.style.top = '0';
+  overlay.style.left = '0';
+  overlay.style.width = '100vw';
+  overlay.style.height = '100vh';
+  overlay.style.backgroundColor = 'rgba(0,0,0,0.6)';
+  overlay.style.display = 'flex';
+  overlay.style.alignItems = 'center';
+  overlay.style.justifyContent = 'center';
+  overlay.style.zIndex = '9999';
+  overlay.style.opacity = '0';
+  overlay.style.transition = 'opacity 0.3s ease';
+
+  const modal = document.createElement('div');
+  modal.style.backgroundColor = 'var(--bg-white, #ffffff)';
+  modal.style.padding = '30px 40px';
+  modal.style.borderRadius = '16px';
+  modal.style.boxShadow = '0 15px 40px rgba(0,0,0,0.3)';
+  modal.style.textAlign = 'center';
+  modal.style.transform = 'translateY(-20px) scale(0.95)';
+  modal.style.transition = 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+  modal.style.minWidth = '320px';
+  modal.style.maxWidth = '400px';
+
+  const icon = document.createElement('div');
+  icon.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+  icon.style.fontSize = '45px';
+  icon.style.color = '#27ae60';
+  icon.style.marginBottom = '15px';
+
+  const title = document.createElement('h3');
+  title.innerText = 'Added to Cart!';
+  title.style.margin = '0 0 20px 0';
+  title.style.color = 'var(--text-main, #333)';
+  title.style.fontSize = '1.4rem';
+
+  const productDetails = document.createElement('div');
+  productDetails.style.display = 'flex';
+  productDetails.style.alignItems = 'center';
+  productDetails.style.gap = '15px';
+  productDetails.style.padding = '15px';
+  productDetails.style.backgroundColor = 'rgba(0,0,0,0.03)';
+  productDetails.style.borderRadius = '12px';
+  productDetails.style.marginBottom = '20px';
+  productDetails.style.textAlign = 'left';
+
+  const img = document.createElement('img');
+  img.src = imageSrc;
+  img.style.width = '70px';
+  img.style.height = '70px';
+  img.style.objectFit = 'cover';
+  img.style.borderRadius = '8px';
+
+  const infoDiv = document.createElement('div');
+  infoDiv.style.flex = '1';
+
+  const pName = document.createElement('h4');
+  pName.innerText = name;
+  pName.style.margin = '0 0 5px 0';
+  pName.style.fontSize = '1.05rem';
+  pName.style.color = 'var(--text-main, #333)';
+
+  const pPrice = document.createElement('p');
+  pPrice.innerText = formatINR(price);
+  pPrice.style.margin = '0';
+  pPrice.style.color = 'var(--accent-color, #c0a080)';
+  pPrice.style.fontWeight = '600';
+
+  infoDiv.appendChild(pName);
+  infoDiv.appendChild(pPrice);
+  productDetails.appendChild(img);
+  productDetails.appendChild(infoDiv);
+
+  // Quantity adjuster
+  const qtyWrapper = document.createElement('div');
+  qtyWrapper.style.display = 'flex';
+  qtyWrapper.style.alignItems = 'center';
+  qtyWrapper.style.justifyContent = 'space-between';
+  qtyWrapper.style.marginBottom = '25px';
+
+  const qtyLabel = document.createElement('span');
+  qtyLabel.innerText = 'Quantity:';
+  qtyLabel.style.fontWeight = '500';
+
+  const qtyControls = document.createElement('div');
+  qtyControls.style.display = 'flex';
+  qtyControls.style.alignItems = 'center';
+  qtyControls.style.gap = '15px';
+  qtyControls.style.backgroundColor = 'var(--bg-white, #fff)';
+  qtyControls.style.border = '1px solid rgba(0,0,0,0.1)';
+  qtyControls.style.padding = '5px 10px';
+  qtyControls.style.borderRadius = '8px';
+
+  const btnMinus = document.createElement('button');
+  btnMinus.innerHTML = '<i class="fa-solid fa-minus"></i>';
+  btnMinus.style.border = 'none';
+  btnMinus.style.background = 'none';
+  btnMinus.style.cursor = 'pointer';
+  btnMinus.style.fontSize = '0.9rem';
+  btnMinus.style.color = 'var(--text-muted, #666)';
+
+  const qtyDisplay = document.createElement('span');
+  qtyDisplay.innerText = currentQty;
+  qtyDisplay.style.fontWeight = '600';
+  qtyDisplay.style.minWidth = '20px';
+
+  const btnPlus = document.createElement('button');
+  btnPlus.innerHTML = '<i class="fa-solid fa-plus"></i>';
+  btnPlus.style.border = 'none';
+  btnPlus.style.background = 'none';
+  btnPlus.style.cursor = 'pointer';
+  btnPlus.style.fontSize = '0.9rem';
+  btnPlus.style.color = 'var(--text-main, #333)';
+
+  const updateCartItemQty = (newQty) => {
+    if (newQty < 1) return;
+    qtyDisplay.innerText = newQty;
+    
+    const itemIndex = cart.findIndex(i => i.name === name);
+    if (itemIndex > -1) {
+      cart[itemIndex].quantity = newQty;
+      localStorage.setItem('furnicoCart', JSON.stringify(cart));
+      updateCartCount();
+      if(typeof renderCart === 'function') renderCart();
+    }
+  };
+
+  btnMinus.onclick = () => updateCartItemQty(parseInt(qtyDisplay.innerText) - 1);
+  btnPlus.onclick = () => updateCartItemQty(parseInt(qtyDisplay.innerText) + 1);
+
+  qtyControls.appendChild(btnMinus);
+  qtyControls.appendChild(qtyDisplay);
+  qtyControls.appendChild(btnPlus);
+  
+  qtyWrapper.appendChild(qtyLabel);
+  qtyWrapper.appendChild(qtyControls);
+
+  const actionGroup = document.createElement('div');
+  actionGroup.style.display = 'flex';
+  actionGroup.style.gap = '15px';
+
+  const continueBtn = document.createElement('button');
+  continueBtn.innerText = 'Continue Shopping';
+  continueBtn.style.flex = '1';
+  continueBtn.style.padding = '12px 10px';
+  continueBtn.style.backgroundColor = 'transparent';
+  continueBtn.style.color = 'var(--text-main, #333)';
+  continueBtn.style.border = '1px solid #ccc';
+  continueBtn.style.borderRadius = '8px';
+  continueBtn.style.cursor = 'pointer';
+  continueBtn.style.fontWeight = '600';
+  continueBtn.style.fontSize = '0.95rem';
+  continueBtn.style.transition = 'background-color 0.2s';
+  continueBtn.onclick = () => {
+    overlay.style.opacity = '0';
+    modal.style.transform = 'translateY(-20px) scale(0.95)';
+    setTimeout(() => {
+      if (document.body.contains(overlay)) document.body.removeChild(overlay);
+    }, 300);
+  };
+
+  const checkoutBtn = document.createElement('button');
+  checkoutBtn.innerText = 'View Cart';
+  checkoutBtn.style.flex = '1';
+  checkoutBtn.style.padding = '12px 10px';
+  checkoutBtn.style.backgroundColor = 'var(--primary-color, #000)';
+  checkoutBtn.style.color = '#fff';
+  checkoutBtn.style.border = 'none';
+  checkoutBtn.style.borderRadius = '8px';
+  checkoutBtn.style.cursor = 'pointer';
+  checkoutBtn.style.fontWeight = '600';
+  checkoutBtn.style.fontSize = '0.95rem';
+  checkoutBtn.onclick = () => {
+    window.location.href = 'checkout.html';
+  };
+
+  actionGroup.appendChild(continueBtn);
+  actionGroup.appendChild(checkoutBtn);
+
+  modal.appendChild(icon);
+  modal.appendChild(title);
+  modal.appendChild(productDetails);
+  modal.appendChild(qtyWrapper);
+  modal.appendChild(actionGroup);
+
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+
+  void overlay.offsetWidth;
+  overlay.style.opacity = '1';
+  modal.style.transform = 'translateY(0) scale(1)';
+}
+
 function addToCart(name, price, imageSrc) {
+  const user = localStorage.getItem('furnico_user');
+  if (!user) {
+    showLoginPromptPopup();
+    return;
+  }
+
   const existingItem = cart.find(item => item.name === name);
 
   if (existingItem) {
@@ -212,10 +525,10 @@ function addToCart(name, price, imageSrc) {
   } else {
     cart.push({ name: name, price: price, imageSrc: imageSrc, quantity: 1 });
   }
-  
+
   localStorage.setItem('furnicoCart', JSON.stringify(cart));
   updateCartCount();
-  showToast(name + " has been added to your cart!");
+  showAddToCartPopup(name, price, imageSrc);
 }
 
 function removeFromCart(index) {
@@ -272,7 +585,7 @@ function renderCart() {
         <img src="${item.imageSrc}" alt="${item.name}" class="cart-item-img">
         <div class="cart-item-details">
           <h4>${item.name}</h4>
-          <p>₹${item.price.toFixed(2)}</p>
+          <p>${formatINR(item.price)}</p>
         </div>
         <div class="cart-item-quantity">
           <button onclick="updateQuantity(${index}, -1)" aria-label="Decrease quantity">-</button>
@@ -280,7 +593,7 @@ function renderCart() {
           <button onclick="updateQuantity(${index}, 1)" aria-label="Increase quantity">+</button>
         </div>
         <div class="cart-item-subtotal">
-          <strong>₹${itemTotal.toFixed(2)}</strong>
+          <strong>${formatINR(itemTotal)}</strong>
         </div>
         <div class="cart-item-remove">
           <button onclick="removeFromCart(${index})" aria-label="Remove item">&times;</button>
@@ -293,14 +606,14 @@ function renderCart() {
     const discountAmount = subtotal * discountRate;
     const total = subtotal - discountAmount;
 
-    subtotalDisplay.textContent = `₹${subtotal.toFixed(2)}`;
-    
+    subtotalDisplay.textContent = formatINR(subtotal);
+
     if (discountRow && discountDisplay) {
       discountRow.style.display = discountRate > 0 ? 'flex' : 'none';
-      discountDisplay.textContent = `-₹${discountAmount.toFixed(2)}`;
+      discountDisplay.textContent = '-' + formatINR(discountAmount);
     }
 
-    totalDisplay.textContent = `₹${total.toFixed(2)}`;
+    totalDisplay.textContent = formatINR(total);
   }
 }
 
@@ -333,10 +646,10 @@ document.addEventListener('DOMContentLoaded', () => {
       let total = 0;
       lastOrder.forEach(item => {
         const itemTotal = item.price * (item.quantity || 1);
-        html += `<li><span>${item.name} (x${item.quantity || 1})</span><span>₹${itemTotal.toFixed(2)}</span></li>`;
+        html += `<li><span>${item.name} (x${item.quantity || 1})</span><span>${formatINR(itemTotal)}</span></li>`;
         total += itemTotal;
       });
-      html += `</ul><div class="order-total"><strong>Total: ₹${total.toFixed(2)}</strong></div>`;
+      html += `</ul><div class="order-total"><strong>Total: ${formatINR(total)}</strong></div>`;
       orderSummary.innerHTML = html;
     }
   }
@@ -351,7 +664,7 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       const code = couponInput.value.trim().toUpperCase();
       let rate = 0;
-      
+
       if (code === 'WELCOME10' || code === 'WIN10') {
         rate = 0.10;
         couponMessage.textContent = "10% Discount Applied!";
@@ -369,7 +682,7 @@ document.addEventListener('DOMContentLoaded', () => {
         couponMessage.textContent = "Invalid Coupon Code";
         couponMessage.className = "error";
       }
-      
+
       localStorage.setItem('furnicoDiscountRate', rate);
       renderCart();
     });
@@ -384,11 +697,11 @@ document.addEventListener('DOMContentLoaded', () => {
         alert("Your cart is empty!");
         return;
       }
-      
+
       // Validation
       const shippingIds = ['fullName', 'email', 'address', 'city', 'zip'];
       let isValid = true;
-      
+
       // Validate shipping fields
       for (const id of shippingIds) {
         const el = document.getElementById(id);
@@ -443,7 +756,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         // This handles the buy button on other pages if it exists.
         if (event.target.matches('.buy-btn')) {
-            // Potentially handle other "buy" buttons if necessary
+          // Potentially handle other "buy" buttons if necessary
         }
       }
     }
@@ -457,7 +770,7 @@ if (contactForm) {
 
   contactForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    
+
     const submitBtn = contactForm.querySelector('button[type="submit"]');
     if (submitBtn) {
       submitBtn.disabled = true;
@@ -577,7 +890,7 @@ if (priceFilter) {
       if (priceElement) {
         const priceText = priceElement.innerText;
         const price = parseInt(priceText.replace(/[^0-9]/g, ''));
-        
+
         let show = false;
         if (range === 'all') show = true;
         else if (range === '0-16000' && price < 16000) show = true;
@@ -689,3 +1002,190 @@ window.addEventListener('mouseup', () => {
   cursorDot.classList.remove('cursor-click');
   cursorOutline.classList.remove('cursor-click');
 });
+
+// --- Auth Logic ---
+document.addEventListener('DOMContentLoaded', () => {
+  updateAuthNav();
+});
+
+function updateAuthNav() {
+  const user = localStorage.getItem('furnico_user');
+  const navs = document.querySelectorAll('header.navbar nav');
+
+  navs.forEach(nav => {
+    let authLink = nav.querySelector('.auth-link');
+
+    if (!authLink) {
+      authLink = document.createElement('a');
+      authLink.className = 'auth-link';
+
+      const checkoutLink = nav.querySelector('a[href="checkout.html"]');
+      const themeToggleBtn = nav.querySelector('#themeToggle');
+
+      if (checkoutLink) {
+        nav.insertBefore(authLink, checkoutLink);
+      } else if (themeToggleBtn) {
+        nav.insertBefore(authLink, themeToggleBtn);
+      } else {
+        nav.appendChild(authLink);
+      }
+    }
+
+    if (user) {
+      // Logged in
+      authLink.innerHTML = `<i class="fa-regular fa-user"></i> ${user} <span style="font-size: 0.8em; opacity: 0.7; margin-left: 4px;">(Logout)</span>`;
+      authLink.href = '#';
+      authLink.onclick = (e) => {
+        e.preventDefault();
+        localStorage.removeItem('furnico_user');
+        cart = [];
+        localStorage.setItem('furnicoCart', JSON.stringify(cart));
+        updateCartCount();
+        if (typeof renderCart === 'function') renderCart();
+        updateAuthNav();
+
+        // Show stylish logout popup
+        const overlay = document.createElement('div');
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.width = '100vw';
+        overlay.style.height = '100vh';
+        overlay.style.backgroundColor = 'rgba(0,0,0,0.6)';
+        overlay.style.display = 'flex';
+        overlay.style.alignItems = 'center';
+        overlay.style.justifyContent = 'center';
+        overlay.style.zIndex = '9999';
+        overlay.style.opacity = '0';
+        overlay.style.transition = 'opacity 0.3s ease';
+
+        const modal = document.createElement('div');
+        modal.style.backgroundColor = 'var(--bg-white, #ffffff)';
+        modal.style.padding = '40px 50px';
+        modal.style.borderRadius = '16px';
+        modal.style.boxShadow = '0 15px 40px rgba(0,0,0,0.3)';
+        modal.style.textAlign = 'center';
+        modal.style.transform = 'translateY(-20px) scale(0.95)';
+        modal.style.transition = 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+        modal.style.minWidth = '280px';
+        modal.style.minHeight = '200px';
+        modal.style.display = 'flex';
+        modal.style.flexDirection = 'column';
+        modal.style.alignItems = 'center';
+        modal.style.justifyContent = 'center';
+
+        // Loader elements
+        const loaderContainer = document.createElement('div');
+        loaderContainer.style.display = 'flex';
+        loaderContainer.style.flexDirection = 'column';
+        loaderContainer.style.alignItems = 'center';
+
+        const spinner = document.createElement('div');
+        spinner.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+        spinner.style.fontSize = '40px';
+        spinner.style.color = 'var(--primary-color, #000)';
+        spinner.style.marginBottom = '15px';
+
+        const loadingText = document.createElement('h3');
+        loadingText.innerText = 'Logging out...';
+        loadingText.style.margin = '0';
+        loadingText.style.color = 'var(--text-muted, #666)';
+        loadingText.style.fontSize = '1.2rem';
+
+        loaderContainer.appendChild(spinner);
+        loaderContainer.appendChild(loadingText);
+
+        // Success elements
+        const successContainer = document.createElement('div');
+        successContainer.style.display = 'none';
+        successContainer.style.flexDirection = 'column';
+        successContainer.style.alignItems = 'center';
+
+        const icon = document.createElement('div');
+        icon.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+        icon.style.fontSize = '50px';
+        icon.style.color = '#27ae60';
+        icon.style.marginBottom = '20px';
+        icon.style.opacity = '0';
+
+        const text = document.createElement('h3');
+        text.innerText = 'Successfully Logged Out';
+        text.style.margin = '0 0 25px 0';
+        text.style.color = 'var(--text-main, #333)';
+        text.style.fontSize = '1.5rem';
+        text.style.opacity = '0';
+
+        const btn = document.createElement('button');
+        btn.innerText = 'Continue';
+        btn.style.padding = '12px 35px';
+        btn.style.backgroundColor = 'var(--primary-color, #000)';
+        btn.style.color = '#fff';
+        btn.style.border = 'none';
+        btn.style.borderRadius = '8px';
+        btn.style.cursor = 'pointer';
+        btn.style.fontWeight = '600';
+        btn.style.fontSize = '1rem';
+        btn.style.transition = 'background-color 0.3s, transform 0.2s';
+
+        btn.onmouseover = () => btn.style.transform = 'translateY(-2px)';
+        btn.onmouseout = () => btn.style.transform = 'none';
+
+        btn.onclick = () => {
+          overlay.style.opacity = '0';
+          modal.style.transform = 'translateY(-20px) scale(0.95)';
+          setTimeout(() => {
+            if (document.body.contains(overlay)) {
+              document.body.removeChild(overlay);
+            }
+          }, 300);
+        };
+
+        successContainer.appendChild(icon);
+        successContainer.appendChild(text);
+        successContainer.appendChild(btn);
+
+        modal.appendChild(loaderContainer);
+        modal.appendChild(successContainer);
+        overlay.appendChild(modal);
+        document.body.appendChild(overlay);
+
+        // Trigger reflow
+        void overlay.offsetWidth;
+        overlay.style.opacity = '1';
+        modal.style.transform = 'translateY(0) scale(1)';
+
+        // Switch to success after 1 second
+        setTimeout(() => {
+          loaderContainer.style.display = 'none';
+          successContainer.style.display = 'flex';
+
+          icon.animate([
+            { transform: 'scale(0) rotate(-45deg)', opacity: 0 },
+            { transform: 'scale(1.2) rotate(10deg)', opacity: 1, offset: 0.7 },
+            { transform: 'scale(1) rotate(0deg)', opacity: 1 }
+          ], {
+            duration: 600,
+            easing: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+            fill: 'forwards'
+          });
+
+          text.animate([
+            { transform: 'translateY(20px)', opacity: 0 },
+            { transform: 'translateY(-5px)', opacity: 1, offset: 0.7 },
+            { transform: 'translateY(0)', opacity: 1 }
+          ], {
+            duration: 500,
+            delay: 150,
+            easing: 'ease-out',
+            fill: 'forwards'
+          });
+        }, 1000);
+      };
+    } else {
+      // Logged out
+      authLink.innerHTML = `<i class="fa-regular fa-user"></i> Login`;
+      authLink.href = 'login.html';
+      authLink.onclick = null;
+    }
+  });
+}

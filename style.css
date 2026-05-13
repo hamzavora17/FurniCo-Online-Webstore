@@ -536,8 +536,8 @@ body.dark-mode .hero-text-content h1 { color: #fff; }
 .btn-secondary {
   background: transparent;
   color: var(--primary-color);
-  border: 2px solid var(--primary-color);
-  padding: 14px 35px;
+  border: none;
+  padding: 16px 35px;
   box-shadow: none;
 }
 .btn-secondary:hover {
@@ -547,7 +547,6 @@ body.dark-mode .hero-text-content h1 { color: #fff; }
   box-shadow: 0 6px 20px rgba(0,0,0,0.1);
 }
 body.dark-mode .btn-secondary {
-  border-color: var(--text-light);
   color: var(--text-light);
 }
 body.dark-mode .btn-secondary:hover {
@@ -1466,11 +1465,6 @@ section.owner-contact-section .content {
   border-top: 4px solid var(--accent-color);
   text-align: left;
   height: 100%;
-  transition: transform 0.3s ease;
-}
-
-.owner-details:hover {
-  transform: translateY(-5px);
 }
 
 .owner-icon {
@@ -1479,6 +1473,29 @@ section.owner-contact-section .content {
   margin-bottom: 20px;
   display: block;
 }
+
+.owner-image {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 20px;
+  display: block;
+  border: 3px solid var(--accent-color);
+  box-shadow: var(--shadow-md);
+}
+
+.about-img img.about-owner-img {
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  margin: 0 auto;
+  border: 6px solid var(--accent-color);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+}
+
 
 .owner-role {
   color: var(--accent-color);
@@ -2497,6 +2514,7 @@ body.dark-mode .accordion-content {
   margin-bottom: 25px;
   letter-spacing: -2px;
   line-height: 1.1;
+  color: #ffffff;
   text-shadow: 0 10px 30px rgba(0,0,0,0.3);
 }
 
@@ -2954,6 +2972,200 @@ body.dark-mode .resource-link:hover {
 
 body.dark-mode .resource-link:hover i {
   color: var(--bg-white);
+}
+
+/* --- Custom Cursor --- */
+.cursor-dot, .cursor-outline {
+  display: none;
+}
+
+@media (pointer: fine) {
+  * {
+    cursor: none !important; /* Hides the default cursor on desktop */
+  }
+  
+  .cursor-dot {
+    display: block;
+    width: 8px;
+    height: 8px;
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color), #e74c3c, var(--primary-color));
+    background-size: 300% 300%;
+    animation: cursor-gradient 3s ease infinite;
+    position: fixed;
+    top: 0;
+    left: 0;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    z-index: 99999;
+    pointer-events: none;
+    transition: width 0.3s ease, height 0.3s ease, opacity 0.3s ease, transform 0.2s ease;
+    opacity: 0; /* Hidden until first mouse movement */
+  }
+
+  .cursor-outline {
+    display: block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--accent-color);
+    position: fixed;
+    top: 0;
+    left: 0;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    z-index: 99998;
+    pointer-events: none;
+    transition: transform 0.1s ease-out, width 0.3s ease, height 0.3s ease, opacity 0.3s ease;
+    opacity: 0; /* Hidden until first mouse movement */
+  }
+
+  /* Hover effect for interactive elements */
+  .cursor-outline.cursor-hover {
+    width: 0;
+    height: 0;
+    opacity: 0;
+  }
+
+  .cursor-dot.cursor-hover {
+    width: 24px;
+    height: 24px;
+    opacity: 0.3;
+  }
+
+  /* Click effect */
+  .cursor-dot.cursor-click {
+    transform: translate(-50%, -50%) scale(0.7);
+  }
+
+  @keyframes cursor-gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+}
+
+/* Dark Mode Cursor */
+body.dark-mode .cursor-dot {
+  background: linear-gradient(135deg, var(--bg-white), var(--accent-color), #3498db, var(--bg-white));
+  background-size: 300% 300%;
+}
+body.dark-mode .cursor-outline {
+  border-color: var(--accent-color);
+.modal-content ol {
+  text-align: left;
+  margin: 30px auto;
+  max-width: 400px;
+}
+
+.modal-content li {
+  margin-bottom: 12px;
+  color: var(--text-muted);
+  font-size: 1.05rem;
+}
+
+/* Dark Mode Support */
+body.dark-mode .video-card,
+body.dark-mode .modal-content {
+  background: var(--bg-white);
+  border-color: rgba(255,255,255,0.05);
+}
+
+body.dark-mode .video-info h3,
+body.dark-mode .modal-content h2 {
+  color: #ecf0f1;
+}
+
+@media (max-width: 768px) {
+  .cards.video-grid {
+    grid-template-columns: 1fr;
+    padding: 0 20px;
+  }
+  .modal-content {
+    padding: 40px 25px;
+  }
+  .video-gallery-hero {
+    min-height: 40vh;
+    padding: 60px 20px;
+  }
+  .video-gallery-hero h1 {
+    font-size: 2.5rem;
+  }
+}
+
+/* --- Support Resources (Help Page) --- */
+.support-resources {
+  margin-top: 50px;
+  padding-top: 40px;
+  border-top: 1px solid rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.support-resources h4 {
+  margin-bottom: 25px;
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-weight: 600;
+}
+
+.resource-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+}
+
+.resource-link {
+  padding: 12px 25px;
+  background-color: var(--bg-white);
+  color: var(--text-main);
+  border-radius: 50px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  border: 1px solid rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: var(--shadow-sm);
+}
+
+.resource-link i {
+  color: var(--accent-color);
+  transition: color 0.3s ease;
+}
+
+.resource-link:hover {
+  background-color: var(--primary-color);
+  color: var(--text-light);
+  border-color: var(--primary-color);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+.resource-link:hover i {
+  color: var(--text-light);
+}
+
+/* Dark Mode Support for Resources */
+body.dark-mode .support-resources {
+  border-top-color: rgba(255,255,255,0.1);
+}
+
+body.dark-mode .resource-link {
+  background-color: #2c2c2c;
+  border-color: #444;
+  color: #ecf0f1;
+}
+
+body.dark-mode .resource-link:hover {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+  color: #ffffff;
+}
+
+body.dark-mode .resource-link:hover i {
+  color: #ffffff;
 }
 
 /* --- Custom Cursor --- */

@@ -1,184 +1,191 @@
 <!DOCTYPE html>
 <html lang="en" style="scroll-behavior: smooth;">
+
 <head>
   <meta charset="UTF-8">
   <title>Checkout | FurniCo</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
+
 <body>
 
-<header class="navbar">
-  <div class="logo">FurniCo</div>
-  <nav>
-    <a href="offers.html">Offers</a>
-    <a href="index.html">Home</a>
-    <a href="sofas.html">Sofas</a>
-    <a href="beds.html">Beds</a>
-    <a href="chairs.html">Chairs</a>  
-    <a href="side-tables.html">Side Tables</a>
-    <a href="dining-tables.html">Dining Tables</a>
-    <!-- <a href="affiliate-marketing.html">Affiliate Program</a> -->
-    <a href="help.html">Help</a>
-    <button id="themeToggle" class="theme-toggle" aria-label="Toggle Dark Mode"><i class="fa-solid fa-moon"></i></button>
-  </nav>
-</header>
+  <header class="navbar">
+    <div class="logo">FurniCo</div>
+    <nav>
+      <a href="offers.html">Offers</a>
+      <a href="index.html">Home</a>
+      <a href="sofas.html">Sofas</a>
+      <a href="beds.html">Beds</a>
+      <a href="chairs.html">Chairs</a>
+      <a href="side-tables.html">Side Tables</a>
+      <a href="dining-tables.html">Dining Tables</a>
+      <!-- <a href="affiliate-marketing.html">Affiliate Program</a> -->
+      <a href="help.html">Help</a>
+      <button id="themeToggle" class="theme-toggle" aria-label="Toggle Dark Mode">
+        <i class="fa-solid fa-moon"></i>
+      </button>
+    </nav>
+  </header>
 
-<section class="section checkout-container">
-  <div class="checkout-left">
-    <div style="text-align: left;">
-      <a href="index.html" style="display: inline-flex; align-items: center; padding: 10px 20px; background-color: var(--bg-white); color: var(--text-main); border-radius: var(--radius); box-shadow: var(--shadow-sm); font-weight: 500; font-size: 0.95rem; border: 1px solid rgba(0,0,0,0.05); transition: transform 0.3s, box-shadow 0.3s;"><i class="fa-solid fa-arrow-left" style="margin-right: 8px;"></i> Back to Store</a>
-    </div>
-
-    <div class="cart-details">
-      <h2>Your Cart</h2>
-      <div id="cartItems">
-        <!-- Cart items will be rendered here by JavaScript -->
+  <section class="section checkout-container">
+    <div class="checkout-left">
+      <div style="text-align: left;">
+        <a href="index.html"
+          style="display: inline-flex; align-items: center; padding: 10px 20px; background-color: var(--bg-white); color: var(--text-main); border-radius: var(--radius); box-shadow: var(--shadow-sm); font-weight: 500; font-size: 0.95rem; border: 1px solid rgba(0,0,0,0.05); transition: transform 0.3s, box-shadow 0.3s;"><i
+            class="fa-solid fa-arrow-left" style="margin-right: 8px;"></i> Back to Store</a>
       </div>
-    </div>
-    
-    <div class="shipping-details">
-      <h2>Shipping Information</h2>
-      <form id="checkoutForm">
-        <div class="form-section">
-          <div class="form-group">
-            <label for="fullName">Full Name</label>
-            <input type="text" id="fullName" placeholder="John Doe" required>
-          </div>
-          <div class="form-group">
-            <label for="email">Email Address</label>
-            <input type="email" id="email" placeholder="john@example.com" required>
-          </div>
-          <div class="form-group">
-            <label for="address">Shipping Address</label>
-            <input type="text" id="address" placeholder="123 Furniture St" required>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="city">City</label>
-              <input type="text" id="city" placeholder="New York" required>
-            </div>
-            <div class="form-group">
-              <label for="zip">Zip Code</label>
-              <input type="text" id="zip" placeholder="10001" required>
-            </div>
-          </div>
-        </div>
 
-        <div class="billing-details">
-          <h2 class="billing-title">Billing Information</h2>
-          <div class="form-group-checkbox">
-            <input type="checkbox" id="sameAsShipping" checked>
-            <label for="sameAsShipping">My billing address is the same as my shipping address.</label>
-          </div>
-          <div id="billingForm" class="hidden">
+      <div class="cart-details">
+        <h2>Your Cart</h2>
+        <div id="cartItems">
+          <!-- Cart items will be rendered here by JavaScript -->
+        </div>
+      </div>
+
+      <div class="shipping-details">
+        <h2>Shipping Information</h2>
+        <form id="checkoutForm">
+          <div class="form-section">
             <div class="form-group">
-              <label for="billingFullName">Full Name</label>
-              <input type="text" id="billingFullName" placeholder="Jane Doe">
+              <label for="fullName">Full Name</label>
+              <input type="text" id="fullName" placeholder="John Doe" required>
             </div>
             <div class="form-group">
-              <label for="billingAddress">Billing Address</label>
-              <input type="text" id="billingAddress" placeholder="456 Decor Ave">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" placeholder="john@example.com" required>
+            </div>
+            <div class="form-group">
+              <label for="address">Shipping Address</label>
+              <input type="text" id="address" placeholder="123 Furniture St" required>
             </div>
             <div class="form-row">
               <div class="form-group">
-                <label for="billingCity">City</label>
-                <input type="text" id="billingCity" placeholder="San Francisco">
+                <label for="city">City</label>
+                <input type="text" id="city" placeholder="New York" required>
               </div>
               <div class="form-group">
-                <label for="billingZip">Zip Code</label>
-                <input type="text" id="billingZip" placeholder="94102">
+                <label for="zip">Zip Code</label>
+                <input type="text" id="zip" placeholder="10001" required>
               </div>
             </div>
           </div>
+
+          <div class="billing-details">
+            <h2 class="billing-title">Billing Information</h2>
+            <div class="form-group-checkbox">
+              <input type="checkbox" id="sameAsShipping" checked>
+              <label for="sameAsShipping">My billing address is the same as my shipping address.</label>
+            </div>
+            <div id="billingForm" class="hidden">
+              <div class="form-group">
+                <label for="billingFullName">Full Name</label>
+                <input type="text" id="billingFullName" placeholder="Jane Doe">
+              </div>
+              <div class="form-group">
+                <label for="billingAddress">Billing Address</label>
+                <input type="text" id="billingAddress" placeholder="456 Decor Ave">
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="billingCity">City</label>
+                  <input type="text" id="billingCity" placeholder="San Francisco">
+                </div>
+                <div class="form-group">
+                  <label for="billingZip">Zip Code</label>
+                  <input type="text" id="billingZip" placeholder="94102">
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="order-summary-panel">
+      <h2>Order Summary</h2>
+      <div class="summary-row">
+        <span>Subtotal</span>
+        <span id="summarySubtotal">₹0.00</span>
+      </div>
+      <div class="summary-row" id="summaryDiscountRow" style="display: none;">
+        <span>Discount</span>
+        <span id="summaryDiscount">-₹0.00</span>
+      </div>
+      <div class="summary-row">
+        <span>Shipping</span>
+        <span>FREE</span>
+      </div>
+      <div class="summary-total">
+        <span>Total</span>
+        <span id="summaryTotal">₹0.00</span>
+      </div>
+      <div class="coupon-section">
+        <div class="coupon-input-wrapper">
+          <input type="text" id="couponCode" placeholder="Discount Code">
+          <button id="applyCoupon">Apply</button>
         </div>
-      </form>
-    </div>
-  </div>
-  <div class="order-summary-panel">
-    <h2>Order Summary</h2>
-    <div class="summary-row">
-      <span>Subtotal</span>
-      <span id="summarySubtotal">₹0.00</span>
-    </div>
-    <div class="summary-row" id="summaryDiscountRow" style="display: none;">
-      <span>Discount</span>
-      <span id="summaryDiscount">-₹0.00</span>
-    </div>
-    <div class="summary-row">
-      <span>Shipping</span>
-      <span>FREE</span>
-    </div>
-    <div class="summary-total">
-      <span>Total</span>
-      <span id="summaryTotal">₹0.00</span>
-    </div>
-    <div class="coupon-section">
-      <div class="coupon-input-wrapper">
-        <input type="text" id="couponCode" placeholder="Discount Code">
-        <button id="applyCoupon">Apply</button>
+        <p id="couponMessage"></p>
       </div>
-      <p id="couponMessage"></p>
+      <button class="buy-btn">Place Order</button>
+      <a href="index.html" class="continue-btn">Continue Shopping</a>
+      <button id="clearCartBtn" class="clear-btn">Clear Cart</button>
     </div>
-    <button class="buy-btn">Place Order</button>
-    <a href="index.html" class="continue-btn">Continue Shopping</a>
-    <button id="clearCartBtn" class="clear-btn">Clear Cart</button>
-  </div>
-</section>
+  </section>
 
-<footer class="footer">
-  <div class="footer-content">
-    <div class="footer-brand">
-      <div class="footer-logo" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">FurniCo</div>
-      <p>Premium furniture designed for modern living. Quality craftsmanship delivered to your doorstep.</p>
-      <div class="social-links">
-        <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-        <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-        <a href="#" aria-label="Twitter"><i class="fa-brands fa-twitter"></i></a>
-        <a href="#" aria-label="Pinterest"><i class="fa-brands fa-pinterest"></i></a>
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <div class="footer-logo" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">FurniCo</div>
+        <p>Premium furniture designed for modern living. Quality craftsmanship delivered to your doorstep.</p>
+        <div class="social-links">
+          <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fa-brands fa-twitter"></i></a>
+          <a href="#" aria-label="Pinterest"><i class="fa-brands fa-pinterest"></i></a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <h3>Shop</h3>
+        <ul>
+          <li><a href="sofas.html">Sofas</a></li>
+          <li><a href="beds.html">Beds</a></li>
+          <li><a href="chairs.html">Chairs</a></li>
+          <li><a href="side-tables.html">Side Tables</a></li>
+          <li><a href="dining-tables.html">Dining Tables</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h3>Support</h3>
+        <ul>
+          <li><a href="shipping.html">Shipping Info</a></li>
+          <li><a href="returns.html">Returns & Refunds</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><a href="terms.html">Terms & Conditions</a></li>
+        </ul>
+      </div>
+      <div class="footer-newsletter">
+        <h3>Stay Updated</h3>
+        <p>Subscribe for exclusive offers and design inspiration.</p>
+        <form id="newsletterForm" class="newsletter-form">
+          <input type="email" placeholder="Your email address" required>
+          <button type="submit" aria-label="Subscribe"><i class="fa-solid fa-arrow-right"></i></button>
+        </form>
       </div>
     </div>
-    <div class="footer-links">
-      <h3>Shop</h3>
-      <ul>
-        <li><a href="sofas.html">Sofas</a></li>
-        <li><a href="beds.html">Beds</a></li>
-        <li><a href="chairs.html">Chairs</a></li>
-        <li><a href="side-tables.html">Side Tables</a></li>
-        <li><a href="dining-tables.html">Dining Tables</a></li>
-      </ul>
+    <div class="footer-bottom">
+      <p>&copy; 2026 FurniCo. All rights reserved.</p>
+      <div class="footer-bottom-links">
+        <a href="terms.html">Terms</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="index.html#contact">Contact</a>
+      </div>
     </div>
-    <div class="footer-links">
-      <h3>Support</h3>
-      <ul>
-        <li><a href="shipping.html">Shipping Info</a></li>
-        <li><a href="returns.html">Returns & Refunds</a></li>
-        <li><a href="faq.html">FAQ</a></li>
-        <li><a href="privacy.html">Privacy Policy</a></li>
-        <li><a href="terms.html">Terms & Conditions</a></li>
-      </ul>
-    </div>
-    <div class="footer-newsletter">
-      <h3>Stay Updated</h3>
-      <p>Subscribe for exclusive offers and design inspiration.</p>
-      <form id="newsletterForm" class="newsletter-form">
-        <input type="email" placeholder="Your email address" required>
-        <button type="submit" aria-label="Subscribe"><i class="fa-solid fa-arrow-right"></i></button>
-      </form>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <p>&copy; 2026 FurniCo. All rights reserved.</p>
-    <div class="footer-bottom-links">
-      <a href="terms.html">Terms</a>
-      <a href="privacy.html">Privacy</a>
-      <a href="index.html#contact">Contact</a>
-    </div>
-  </div>
-</footer>
+  </footer>
 
-<script src='https://cdn.jotfor.ms/agent/embedjs/019cb77c093d7bd2baa0928bf0e1519c4ac5/embed.js'>
-</script>
-<script src="script.js"></script>
+  <script src='https://cdn.jotfor.ms/agent/embedjs/019cb77c093d7bd2baa0928bf0e1519c4ac5/embed.js'>
+  </script>
+  <script src="script.js"></script>
 </body>
+
 </html>
